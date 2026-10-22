@@ -1,0 +1,114 @@
+00001000 Starting Address
+Assembler used: EASy68K Editor/Assembler v5.16.01
+Created On: 22/10/2026 9:47:37
+
+00000000                             1  *-----------------------------------------------------------
+00000000                             2  *CONST
+00000000                             3  *Contiene las constantes (coordenadas, colores...)
+00000000                             4  *-----------------------------------------------------------
+00000000                             5  ;CONSTANTES DEL COWBOY
+00000000  =00000180                  6  COWBOY_INIT_X        EQU 384 ;Puse eso por poner
+00000000  =000001B4                  7  COWBOY_INIT_Y        EQU 436 ;lo mismo
+00000000  =00000006                  8  COWBOY_VELOCIDAD     EQU 6
+00000000  =00000020                  9  COWBOY_ANCHO         EQU 32
+00000000  =00000040                 10  COWBOY_ALTO          EQU 64
+00000000                            11  
+00000000                            12  ;CONSTANTES DEL CACTUS
+00000000  =00000004                 13  MAX_CACTUS           EQU 4
+00000000  =00000028                 14  CACTUS_ANCHO         EQU 40
+00000000  =00000046                 15  CACTUS_ALTO          EQU 70
+00000000  =00000078                 16  SPAWN_TIEMPO         EQU 120
+00000000                            17  
+00000000  =00000000                 18  ESTADO_CACTUS_NORMAL EQU 0
+00000000  =00000001                 19  ESTADO_CACTUS_FLOR   EQU 1
+00000000                            20  
+00000000                            21  ;CONSTANTES DE LA BARRA DE STAMINA
+00000000                            22  
+00000000  =00000064                 23  STAMINA_MAXIMA       EQU 100
+00000000  =0000001E                 24  STAMINA_RITMO        EQU 30
+00000000  =00000014                 25  STAMINA_RESTA_CACTUS EQU 20
+00000000  =00000019                 26  STAMINA_SUMA_FLOR    EQU 25
+00000000  =00000014                 27  STAMINA_POS_X        EQU 20
+00000000  =00000014                 28  STAMINA_POS_Y        EQU 20
+00000000  =000000C8                 29  STAMINA_BARRA_ALTO   EQU 200
+00000000  =00000014                 30  STAMINA_BARRA_ANCHO  EQU 20
+00000000                            31  
+00000000                            32  ;CRONOMETRO
+00000000  =00000014                 33  CONTADOR_POS_X       EQU 20
+00000000  =00000032                 34  CONTADOR_POS_Y       EQU 50
+00000000                            35  
+00000000                            36  ;MENU
+00000000  =0000012C                 37  BTN_JUGAR_X1         EQU 300
+00000000  =000000DC                 38  BTN_JUGAR_Y1         EQU 220
+00000000  =000001F4                 39  BTN_JUGAR_X2         EQU 500
+00000000  =00000118                 40  BTN_JUGAR_Y2         EQU 280
+00000000                            41  
+00000000  =0000012C                 42  BTN_LEADERBOARD_X1   EQU 300
+00000000  =000000DC                 43  BTN_LEADERBOARD_Y1   EQU 220
+00000000  =000001F4                 44  BTN_LEADERBOARD_X2   EQU 500
+00000000  =00000118                 45  BTN_LEADERBOARD_Y2   EQU 280
+00000000                            46  
+00000000                            47  ;COLORES
+00000000  =00000000                 48  COLOR_NEGRO             EQU $00000000
+00000000  =00FFFFFF                 49  COLOR_BLANCO            EQU $00FFFFFF
+00000000  =000000FF                 50  COLOR_ROJO              EQU $000000FF
+00000000  =0000FF00                 51  COLOR_VERDE             EQU $0000FF00
+00000000  =00FF0000                 52  COLOR_AZUL              EQU $00FF0000
+00000000  =00108020                 53  COLOR_VERDE_CACTUS      EQU $00108020
+00000000  =0000D7FF                 54  COLOR_AMARILLO_FLOR     EQU $0000D7FF
+00000000  =0080C0FF                 55  COLOR_FONDO             EQU $0080C0FF
+00000000  =00808080                 56  COLOR_GRIS_MARCO        EQU $00808080
+00000000                            57  
+00000000                            58  
+00000000                            59  
+00000000                            60  
+00000000                            61  
+00000000                            62  
+00000000                            63  
+Line 64 WARNING: END directive missing, starting address not set
+
+No errors detected
+1 warning generated
+
+
+SYMBOL TABLE INFORMATION
+Symbol-name         Value
+-------------------------
+BTN_JUGAR_X1        12C
+BTN_JUGAR_X2        1F4
+BTN_JUGAR_Y1        DC
+BTN_JUGAR_Y2        118
+BTN_LEADERBOARD_X1  12C
+BTN_LEADERBOARD_X2  1F4
+BTN_LEADERBOARD_Y1  DC
+BTN_LEADERBOARD_Y2  118
+CACTUS_ALTO         46
+CACTUS_ANCHO        28
+COLOR_AMARILLO_FLOR  D7FF
+COLOR_AZUL          FF0000
+COLOR_BLANCO        FFFFFF
+COLOR_FONDO         80C0FF
+COLOR_GRIS_MARCO    808080
+COLOR_NEGRO         0
+COLOR_ROJO          FF
+COLOR_VERDE         FF00
+COLOR_VERDE_CACTUS  108020
+CONTADOR_POS_X      14
+CONTADOR_POS_Y      32
+COWBOY_ALTO         40
+COWBOY_ANCHO        20
+COWBOY_INIT_X       180
+COWBOY_INIT_Y       1B4
+COWBOY_VELOCIDAD    6
+ESTADO_CACTUS_FLOR  1
+ESTADO_CACTUS_NORMAL  0
+MAX_CACTUS          4
+SPAWN_TIEMPO        78
+STAMINA_BARRA_ALTO  C8
+STAMINA_BARRA_ANCHO  14
+STAMINA_MAXIMA      64
+STAMINA_POS_X       14
+STAMINA_POS_Y       14
+STAMINA_RESTA_CACTUS  14
+STAMINA_RITMO       1E
+STAMINA_SUMA_FLOR   19
