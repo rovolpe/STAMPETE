@@ -1,12 +1,12 @@
 *-----------------------------------------------------------
-STAMINA
-Barra de stamina que funciona como barra de vida.
-Mostrará en pantalla en el juego la barra que irá bajando
-por el tiempo
+*STAMINA
+*Barra de stamina que funciona como barra de vida.
+*Mostrará en pantalla en el juego la barra que irá bajando
+*por el tiempo
 
-Tiene que tener subrutinas que hacen que baje mas rapido o que
-sumen cierta cantidad para cuando se come una flor de cactus
-o cuando se choca contra uno.
+*Tiene que tener subrutinas que hacen que baje mas rapido o que
+*sumen cierta cantidad para cuando se come una flor de cactus
+*o cuando se choca contra uno.
 *--------------c---------------------------------------------
 *inicializar la barra de estamina
 
@@ -19,6 +19,7 @@ o cuando se choca contra uno.
 *sumar la stamina
 
 *dibujarla en la pantalla
+
 
 
 

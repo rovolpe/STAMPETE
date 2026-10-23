@@ -12,8 +12,6 @@
 *total del tiempo
 
 *-----------------------------------------------------------
-    ORG    $1000
-START:                  ; first instruction of program
 
 * ESCRIBIR EL LEADERBOARD
 * ORDENAR LA LISTA
@@ -21,11 +19,7 @@ START:                  ; first instruction of program
 * DIBUJAR LA LISTA
 * SALIR DEL LEADERBOARD
 
-    SIMHALT             ; halt simulator
 
-* Put variables and constants here
-
-    END    START        ; last line of source
 
 
 

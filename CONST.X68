@@ -56,6 +56,24 @@ COLOR_FONDO             EQU $0080C0FF
 COLOR_GRIS_MARCO        EQU $00808080
 
 
+;Me he inventado algunos pero habría que poner
+;uno por audio
+*EFECTOS DE SONIDO: IDS
+ID_SND_DISPARO  EQU 0
+ID_SND_FLOR     EQU 1
+ID_SND_HERIDO   EQU 2
+ID_SND_COMER    EQU 3
+
+
+
+*RUTAS ARCHIVOS
+PATH_DISPARO:   DC.B    'disparo.wav',0
+PATH_FLOR:      DC.B    'flor.wav',0
+PATH_HERIDO:    DC.B    'herido.wav',0
+PATH_COMER:     DC.B    'comer.wav',0
+
+
+
 
 
 

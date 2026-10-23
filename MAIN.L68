@@ -1,8 +1,8 @@
-00001000 Starting Address
+0000102A Starting Address
 Assembler used: EASy68K Editor/Assembler v5.16.01
-Created On: 22/10/2026 9:51:20
+Created On: 22/10/2026 23:44:07
 
-00000000                             1  *-----------------------------------------------------------
+00000000                             1      *-----------------------------------------------------------
 00000000                             2  *MAIN
 00000000                             3  *Aquí se verificarán os estados de todo el juego y decidirá
 00000000                             4  *a que subrutinas llamar.
@@ -21,7 +21,7 @@ Created On: 22/10/2026 9:51:20
 00001000                            17      ORG    $1000
 00001000                            18  
 00001000                            19  *-----------------------------------------------------------
-00001000                            20  * 1. INCLUIR LAOS OTROS MÓDULOS DE CÓDIGO
+00001000                            20  * 1. INCLUIR LAOS OTROS MÓDULOS DE CONSTANTES
 00001000                            21  *-----------------------------------------------------------
 00001000                            22  
 00001000                            23      INCLUDE "CONST.X68"
@@ -44,7 +44,7 @@ Created On: 22/10/2026 9:51:20
 00001000                            40  ;CONSTANTES DE LA BARRA DE STAMINA
 00001000                            41  
 00001000  =00000064                 42  STAMINA_MAXIMA       EQU 100
-00001000  =0000001E                 43  STAMINA_RITMO        EQU 30
+00001000  =00000003                 43  STAMINA_RITMO        EQU 3
 00001000  =00000014                 44  STAMINA_RESTA_CACTUS EQU 20
 00001000  =00000019                 45  STAMINA_SUMA_FLOR    EQU 25
 00001000  =00000014                 46  STAMINA_POS_X        EQU 20
@@ -79,68 +79,592 @@ Created On: 22/10/2026 9:51:20
 00001000  =00808080                 75  COLOR_GRIS_MARCO        EQU $00808080
 00001000                            76  
 00001000                            77  
-00001000                            78  
-00001000                            79  
-00001000                            80  
-00001000                            81  
-00001000                            82  
-00001000                            83  
-00001000                            84  -------------------- end include --------------------
-00001000                            85      INCLUDE "SYSCONST.X68"
-00001000                            86  ;DIMENSIONES DE LA PANTALLA
-00001000  =00000320                 87  PANTALLA_ANCHO      EQU 800
-00001000  =00000258                 88  PANTALLA_ALTO       EQU 600
-00001000  =0000003C                 89  FPS_OBJETIVO        EQU 60
-00001000                            90  
-00001000                            91  
-00001000                            92  ;ESTADOS DEL JUEGO
-00001000                            93  
-00001000  =00000000                 94  ESTADO_VAL_MENU     EQU 0
-00001000  =00000001                 95  ESTADO_VAL_JUEGO    EQU 1
-00001000  =00000002                 96  ESTADO_VAL_LEADERBOARD    EQU 2
-00001000                            97  
-00001000                            98  
-00001000                            99  ;TAREAS DEL TRAP #15 Para acordarse
-00001000                           100  
-00001000  =00000004                101  T_LEER_CARACTER     EQU 4
-00001000  =00000005                102  T_LEER_TECLADO      EQU 5
-00001000                           103  
-00001000  =00000050                104  T_GRAF_INIT         EQU 80
-00001000  =00000051                105  T_GRAF_LIMPIAR      EQU 81
-00001000  =00000052                106  T_GRAF_PIXEL        EQU 82
-00001000  =00000053                107  T_GRAF_LINEA        EQU 83
-00001000  =00000054                108  T_GRAF_TEXTO        EQU 84
-00001000                           109  
-00001000  =00000033                110  T_ABRIR_ARCHIVO     EQU 51
-00001000  =00000034                111  T_CERRAR_ARCHIVO    EQU 52
-00001000  =00000035                112  T_LEER_ARCHIVO      EQU 53
-00001000  =00000036                113  T_ESCRIBIR_ARCHIVO  EQU 54
-00001000                           114  
-00001000  =00000048                115  T_SONIDO            EQU 72
-00001000                           116  
-00001000                           117  
-00001000  =00000056                118  T_POSICION_RATON    EQU 86
-00001000                           119  ;FPS TOTALES
-00001000                           120  ;por definir
-00001000                           121  
-00001000                           122  
-00001000                           123  
-00001000                           124  
-00001000                           125  
-00001000                           126  -------------------- end include --------------------
-00001000                           127      INCLUDE "SYSTEM.X68"
-00001000                           128  
-00001000                           129      ORG    $1000
-00001000                           130  START:                  ; first instruction of program
-00001000                           131  
-00001000                           132  
-00001000                           133  
-00001000                           134  
-00001000  FFFF FFFF                135      SIMHALT             ; halt simulator
-00001004                           136  
-00001004                           137  
-00001004                           138      END    START        ; last line of source
-00001004                           139  -------------------- end include --------------------
+00001000                            78  ;Me he inventado algunos pero habría que poner
+00001000                            79  ;uno por audio
+00001000  =00000000                 80  ID_SND_DISPARO  EQU 0
+00001000  =00000001                 81  ID_SND_FLOR     EQU 1
+00001000  =00000002                 82  ID_SND_HERIDO   EQU 2
+00001000  =00000003                 83  ID_SND_COMER    EQU 3
+00001000                            84  
+00001000                            85  
+00001000                            86  
+00001000= 64 69 73 70 61 72 ...     87  PATH_DISPARO:   DC.B    'disparo.wav',0
+0000100C= 66 6C 6F 72 2E 77 ...     88  PATH_FLOR:      DC.B    'flor.wav',0
+00001015= 68 65 72 69 64 6F ...     89  PATH_HERIDO:    DC.B    'herido.wav',0
+00001020= 63 6F 6D 65 72 2E ...     90  PATH_COMER:     DC.B    'comer.wav',0
+0000102A                            91  
+0000102A                            92  
+0000102A                            93  
+0000102A                            94  
+0000102A                            95  
+0000102A                            96  
+0000102A                            97  
+0000102A                            98  
+0000102A                            99  
+0000102A                           100  
+0000102A                           101  -------------------- end include --------------------
+0000102A                           102      INCLUDE "SYSCONST.X68"
+0000102A                           103  ;DIMENSIONES DE LA PANTALLA
+0000102A  =00000320                104  PANTALLA_ANCHO      EQU 800
+0000102A  =00000258                105  PANTALLA_ALTO       EQU 600
+0000102A  =0000003C                106  FPS_OBJETIVO        EQU 60
+0000102A                           107  
+0000102A                           108  
+0000102A                           109  ;ESTADOS DEL JUEGO
+0000102A                           110  
+0000102A  =00000000                111  ESTADO_VAL_MENU     EQU 0
+0000102A  =00000001                112  ESTADO_VAL_JUEGO            EQU 1
+0000102A  =00000002                113  ESTADO_VAL_LEADERBOARD    EQU 2
+0000102A                           114  
+0000102A                           115  
+0000102A                           116  ;TAREAS DEL TRAP #15 Para acordarse
+0000102A                           117  
+0000102A  =00000005                118  T_LEER_CARACTER     EQU 5
+0000102A  =00000007                119  T_LEER_TECLADO      EQU 7
+0000102A  =00000013                120  T_LEER4_TECLADO     EQU 19
+0000102A  =00000008                121  T_TIEMPO_SISTEMA    EQU 8
+0000102A  =0000003D                122  T_LEER_RATON        EQU 61
+0000102A                           123  
+0000102A  =00000021                124  T_GRAF_INIT         EQU 33
+0000102A  =0000000B                125  T_GRAF_LIMPIAR      EQU 11
+0000102A  =00000052                126  T_GRAF_PIXEL        EQU 82
+0000102A  =00000053                127  T_GRAF_LINEA        EQU 83
+0000102A  =0000005F                128  T_GRAF_TEXTO        EQU 95
+0000102A  =00000058                129  T_GRAF_ELIPSE       EQU 88
+0000102A  =00000057                130  T_GRAF_RECT         EQU 87
+0000102A  =00000050                131  T_PEN_COLOR         EQU 80
+0000102A  =00000051                132  T_FILL_COLOR        EQU 81
+0000102A                           133  
+0000102A  =00000034                134  T_CREAR_ARCHIVO     EQU 52
+0000102A  =00000033                135  T_ABRIR_ARCHIVO     EQU 51
+0000102A  =00000038                136  T_CERRAR_ARCHIVO    EQU 56
+0000102A  =00000035                137  T_LEER_ARCHIVO      EQU 53
+0000102A  =00000036                138  T_ESCRIBIR_ARCHIVO  EQU 54
+0000102A                           139  
+0000102A  =00000046                140  T_PLAY_WAB_DIREC    EQU 70
+0000102A  =00000047                141  T_CARGAR_SO         EQU 71
+0000102A  =00000048                142  T_REP_SO            EQU 72
+0000102A  =0000004C                143  T_CTRL_SO           EQU 76
+0000102A                           144  
+0000102A                           145  
+0000102A  =00000056                146  T_POSICION_RATON    EQU 86
+0000102A                           147  ;FPS TOTALES
+0000102A                           148  ;por definir
+0000102A                           149  
+0000102A                           150  
+0000102A                           151  
+0000102A                           152  
+0000102A                           153  
+0000102A                           154  
+0000102A                           155  
+0000102A                           156  
+0000102A                           157  
+0000102A                           158  
+0000102A                           159  
+0000102A                           160  
+0000102A                           161  -------------------- end include --------------------
+0000102A                           162      
+0000102A                           163  *-----------------------------------------------------------
+0000102A                           164  * 2. INCLUIR LOS MÓDULOS DE DATOS
+0000102A                           165  *-----------------------------------------------------------
+0000102A                           166  * Si metemos alguno más en el futuro
+0000102A                           167  
+0000102A                           168  *-----------------------------------------------------------
+0000102A                           169  * 1. INICIALIZAR
+0000102A                           170  *-----------------------------------------------------------
+0000102A                           171  START: 
+0000102A  6100 0044                172          BSR INIT_SYSTEM ;Vamos a la subrutina de inicializar
+0000102E                           173                          ;el sistema SIN HACER
+0000102E                           174  *        BSR CARGAR_LEADERBOARD ; Cargamos los datos guardados
+0000102E                           175                                 ; POR HACER
+0000102E                           176  *       BSR INICIALIZAR_MENU ; POR HACER
+0000102E  13FC 0000 0000106E       177          MOVE.B #ESTADO_VAL_MENU, ESTADO_JUEGO ;CONSTANTES AUN
+00001036                           178                                                ;SIN DEFINIR
+00001036                           179  *-----------------------------------------------------------
+00001036                           180  * 4. ACTUALIZAR
+00001036                           181  *-----------------------------------------------------------
+00001036                           182  *Bucle principal que según el estado ejecuta cada parte del
+00001036                           183  *juego
+00001036                           184  
+00001036                           185  MAIN_LOOP:
+00001036  1039 0000106E            186      MOVE.B ESTADO_JUEGO, D0 ;Metemos el estado en D0 para
+0000103C                           187                              ;comparar
+0000103C  B03C 0000                188      CMP.B #ESTADO_VAL_MENU, D0 ;Si es el del menu lo ejecuta
+00001040  6700 0016                189      BEQ EJECUTAR_MENU ; POR HACER
+00001044                           190      
+00001044  B03C 0001                191      CMP.B #ESTADO_VAL_JUEGO, D0 ;Si es el juego lo ejecuta
+00001048  6700 0016                192      BEQ EJECUTAR_JUEGO ;POR HACER
+0000104C                           193      
+0000104C  B03C 0002                194      CMP.B #ESTADO_VAL_LEADERBOARD, D0 ;Si es leaderboard lo mismo
+00001050  6700 000E                195      BEQ EJECUTAR_JUEGO ; POR HACER
+00001054                           196      
+00001054  6000 0016                197      BRA APLICAR_FPS ;APLICAMOS LOS FPS QUE TOCAN POR HACER
+00001058                           198      
+00001058                           199                  ;MENU
+00001058                           200  
+00001058                           201  EJECUTAR_MENU:
+00001058                           202  
+00001058                           203      * ESTO IRA EN EL SYSTEM
+00001058  6100 00BA                204      BSR LEER_TECLADO_MENU
+0000105C  6100 00E2                205      BSR LEER_RATON  
+00001060                           206     * BSR ACTUALIZAR_MENU ;POR HACER
+00001060                           207  
+00001060                           208     *BSR LIMPIAR_PANTALLA ; POR HACER
+00001060                           209     *BSR DIBUJAR_MENU    ;POR HACER
+00001060                           210     *BRA APLICAR_FPS ;POR HACER
+00001060                           211  
+00001060                           212              ;JUEGO
+00001060                           213  EJECUTAR_JUEGO:
+00001060                           214  
+00001060                           215      * ESTO IRA EN EL SYSTEM
+00001060  6100 0072                216      BSR     LEER_TECLADO_JUEGO ;POR HACER
+00001064  6100 00DA                217      BSR     LEER_RATON ;POR HACER
+00001068                           218  
+00001068                           219      *BSR     ACTUALIZAR_COWBOY ;POR HACER
+00001068                           220      *BSR     ACTUALIZAR_CACTUS ;POR HACER
+00001068                           221      *BSR     ACTUALIZAR_STAMINA  ;POR HACER
+00001068                           222      *BSR     ACTUALIZAR_CONTADOR  ;POR HACER
+00001068                           223      
+00001068                           224      * PANTALLA
+00001068                           225      *BSR     LIMPIAR_PANTALLA ;POR HACER
+00001068                           226      *BSR     DIBUJAR_FONDO ;POR HACER
+00001068                           227     * BSR     DIBUJAR_CACTUS ;POR HACER
+00001068                           228      *BSR     DIBUJAR_COWBOY ; POR HACER
+00001068                           229      *BSR     DIBUJAR_STAMINA ;POR HACER
+00001068                           230      *BSR     DIBUJAR_CONTADOR ;POR HACER
+00001068                           231     * BRA     APLICAR_FPS ;POR HACER
+00001068                           232      
+00001068                           233  EJECUTAR_LEADERBOARD:
+00001068                           234      *ESTO EN EL SYSTEM
+00001068  6100 00D6                235      BSR     LEER_RATON ;POR HACER 
+0000106C                           236      *BSR     ACTUALIZAR_LEADERBOARD ;POR HACER
+0000106C                           237  
+0000106C                           238  
+0000106C                           239     * BSR     LIMPIAR_PANTALLA ;POR HACER
+0000106C                           240      *BSR     DIBUJAR_LEADERBOARD ;POR HACER
+0000106C                           241      *BRA     APLICAR_FPS ;POR HACER
+0000106C                           242  *-----------------------------------------------------------
+0000106C                           243  * 5. ESPERAR A SINCRONIZACIÓN
+0000106C                           244  *-----------------------------------------------------------
+0000106C                           245  APLICAR_FPS:
+0000106C                           246     * BSR     REGULAR_FPS ;POR HACER
+0000106C  60C8                     247      BRA     MAIN_LOOP   ;POR HACER
+0000106E                           248  *-----------------------------------------------------------
+0000106E                           249  * 6. VARIABLES DE ESTADO
+0000106E                           250  *-----------------------------------------------------------
+0000106E                           251  ESTADO_JUEGO:    DS.B    1
+00001070                           252                   DS.W    0
+00001070                           253  
+00001070                           254  
+00001070                           255  *-----------------------------------------------------------
+00001070                           256  * 7. INCLUIR MÓDULOS CODIGO
+00001070                           257  *-----------------------------------------------------------
+00001070                           258  
+00001070                           259      INCLUDE "SYSTEM.X68"
+00001070                           260  
+00001070                           261  
+00001070                           262  
+00001070                           263  
+00001070                           264  INIT_SYSTEM:
+00001070                           265  
+00001070                           266  
+00001070  48E7 E000                267      MOVEM.L D0-D2, -(A7)        ;Guardamos los reg en la pila
+00001074  007C 0700                268      ORI.W #$0700, SR        ;Desactivamos todas las interrupciones
+00001078                           269       
+00001078                           270  
+00001078                           271      ;configurar el timer
+00001078  21FC 000010CA 0078       272      MOVE.L  #ISR_TIMER, $78 ;Metemos el vector de interrupción
+00001080  4239 00001298            273      CLR.B   FLAG_FRAMES ;limpiamos el flag de sincronizar
+00001086                           274      
+00001086                           275      ;Inicializar ventana gráfica
+00001086  223C 03200258            276      MOVE.L  #PANTALLA_ANCHO<<16|PANTALLA_ALTO,D1
+0000108C  103C 0021                277      MOVE.B  #T_GRAF_INIT, D0
+00001090  4E4F                     278      TRAP    #15
+00001092                           279      
+00001092                           280      ;limpiamos la pantalla
+00001092  103C 000B                281      MOVE.B #T_GRAF_LIMPIAR, D0
+00001096  323C FF00                282      MOVE.W #$FF00, D1
+0000109A  4E4F                     283      TRAP #15
+0000109C                           284      ;reiniciamos variables
+0000109C  4239 00001299            285      CLR.B   TECLA_ASCII
+000010A2  4239 0000129A            286      CLR.B   ESTADO_WASD ;estado es pulsado/no pulsado
+000010A8  4239 0000129B            287      CLR.B   EDGE_WASD ;edge es si lo pulsas se vuelve 1 por un fotograma
+000010AE  4279 0000129C            288      CLR.W   MOUSE_X
+000010B4  4279 0000129E            289      CLR.W   MOUSE_Y
+000010BA  4239 000012A2            290      CLR.B   MOUSE_CLICK
+000010C0                           291      
+000010C0  027C F8FF                292      ANDI.W #$F8FF, SR
+000010C4  4CDF 0007                293      MOVEM.L (A7)+, D0-D2
+000010C8  4E75                     294      RTS
+000010CA                           295      
+000010CA                           296      
+000010CA                           297  ISR_TIMER:
+000010CA  13FC 0001 00001298       298      MOVE.B #1, FLAG_FRAMES
+000010D2  4E73                     299      RTE
+000010D4                           300  
+000010D4                           301  
+000010D4                           302  LEER_TECLADO_JUEGO:
+000010D4                           303  
+000010D4  48E7 F000                304          MOVEM.L D0-D3, -(A7) ;Guardamos los registros
+000010D8  103C 0013                305          MOVE.B #T_LEER4_TECLADO, D0
+000010DC  223C 57534144            306          MOVE.L #'W'<<24+'S'<<16+'A'<<8+'D', D1 ; W A S D
+000010E2  4E4F                     307          TRAP #15
+000010E4                           308          
+000010E4  4202                     309          CLR.B D2
+000010E6  6100 001E                310          BSR .PACK_BITS ;Va a meter los 4 bits en d2
+000010EA                           311          
+000010EA  1039 0000129A            312          MOVE.B (ESTADO_WASD), D0
+000010F0  4600                     313          NOT.B D0
+000010F2  C002                     314          AND.B D2, D0
+000010F4                           315          
+000010F4  13C2 0000129A            316          MOVE.B D2,(ESTADO_WASD)
+000010FA  13C0 0000129B            317          MOVE.B D0,(EDGE_WASD)
+00001100                           318          
+00001100  4CDF 000F                319          MOVEM.L (A7)+, D0-D3 ;restauramos los registros
+00001104  4E75                     320          RTS
+00001106                           321          
+00001106  363C 0003                322  .PACK_BITS  MOVE.W #3, D3
+0000110A  E189                     323  .LOOP       LSL.L #8, D1
+0000110C  E312                     324              ROXL.B #1, D2 ;Mete el bit de estado en D2
+0000110E  51CB FFFA                325              DBRA.W D3, .LOOP
+00001112  4E75                     326              RTS
+00001114                           327          
+00001114                           328  
+00001114                           329  
+00001114                           330  LEER_TECLADO_MENU:
+00001114                           331  
+00001114                           332  
+00001114                           333  
+00001114  48E7 C000                334      MOVEM.L D0-D1, -(A7)    ;guardamos los registros   
+00001118  103C 0007                335      MOVE.B #T_LEER_TECLADO, D0 ; Leemos tecla
+0000111C  4E4F                     336      TRAP #15
+0000111E  4A01                     337      TST.B D1 ;si no hay nada va a limpiar la variable
+00001120  6700 0012                338      BEQ .NO_ASCII
+00001124                           339      
+00001124  103C 0005                340      MOVE.B #T_LEER_CARACTER, D0 ;leemos el caracter
+00001128  4E4F                     341      TRAP #15
+0000112A  13C1 00001299            342      MOVE.B D1, TECLA_ASCII ;lo guardamos en D1
+00001130  6000 0008                343      BRA .NOM_PUESTO
+00001134                           344      
+00001134                           345  .NO_ASCII:
+00001134  4239 00001299            346      CLR.B   TECLA_ASCII ;la limpia
+0000113A                           347      
+0000113A                           348  .NOM_PUESTO:
+0000113A  4CDF 0003                349      MOVEM.L (A7)+, D0-D1
+0000113E  4E75                     350      RTS
+00001140                           351      
+00001140                           352      
+00001140                           353      
+00001140                           354  LEER_RATON:
+00001140                           355  
+00001140                           356  
+00001140  48E7 C000                357      MOVEM.L D0-D1, -(A7) ;Guardamos los registros en la pila 
+00001144  103C 003D                358      MOVE.B #T_LEER_RATON, D0
+00001148  4E4F                     359      TRAP #15
+0000114A                           360      ;esta tarea del trp15 devuelve en d0 el estado de los 
+0000114A                           361      ;botones y en D1 las coordenadas, marcando
+0000114A                           362      ;en la parte alta Y y en la baja X, por lo que:
+0000114A  33C1 0000129C            363      MOVE.W D1, MOUSE_X
+00001150  4841                     364      SWAP    D1  ;Intercambiamos partea lta y baja
+00001152  33C1 0000129E            365      MOVE.W D1, MOUSE_Y
+00001158  13C0 000012A2            366      MOVE.B D0, MOUSE_CLICK
+0000115E                           367      
+0000115E  4CDF 000F                368      MOVEM.L (A7)+, D0-D3 ;Restauramos los registros
+00001162  4E75                     369      RTS
+00001164                           370      
+00001164                           371      
+00001164                           372  DIBUJAR_TEXTO_GFX:
+00001164                           373  
+00001164                           374  DIBUJAR_RECTANGULO_RELLENO:
+00001164                           375  
+00001164  48E7 FC00                376      MOVEM.L D0-D5, -(A7) ;Guardamos los registros
+00001168  2F01                     377      MOVE.L D1, -(A7) ;Metemos en la pila D1 ya que primero hay
+0000116A                           378                       ;que definir el color del relleno
+0000116A  2205                     379      MOVE.L D5, D1 ;Color del pen D5, que pasamos a D1 para el trap
+0000116C  103C 0050                380      MOVE.B #T_PEN_COLOR, D0
+00001170  4E4F                     381      TRAP #15
+00001172                           382      
+00001172  2205                     383      MOVE.L D5, D1 ;Lo mismo pero con color de relleno
+00001174  103C 0051                384      MOVE.B #T_FILL_COLOR, D0
+00001178  4E4F                     385      TRAP #15
+0000117A                           386      
+0000117A  221F                     387      MOVE.L (A7)+, D1
+0000117C  103C 0057                388      MOVE.B #T_GRAF_RECT, D0 ;Lo dibujamos con esos colores
+00001180  4E4F                     389      TRAP #15
+00001182                           390      
+00001182                           391      ;Por si acaso, ponemos que los colores se reestablezcan
+00001182                           392      ;a negro para el futuro
+00001182                           393  
+00001182  7200                     394              MOVE.L  #$00000000,D1
+00001184  103C 0050                395              MOVE.B  #T_PEN_COLOR,D0
+00001188  4E4F                     396              TRAP    #15
+0000118A                           397  
+0000118A  223C 00FFFFFF            398              MOVE.L  #$00FFFFFF,D1 
+00001190  103C 0051                399              MOVE.B  #T_FILL_COLOR,D0
+00001194  4E4F                     400              TRAP    #15
+00001196                           401      
+00001196  4CDF 003F                402      MOVEM.L (A7)+, D0-D5 ;Los restauramos
+0000119A  4E75                     403      RTS
+0000119C                           404  DIBUJAR_ELIPSE:
+0000119C                           405  
+0000119C                           406  
+0000119C  48E7 FC00                407      MOVEM.L D0-D5, -(A7) ;Guardamos los registros
+000011A0  2F01                     408      MOVE.L D1, -(A7) ;Metemos en la pila D1 ya que primero hay
+000011A2                           409                       ;que definir el color del relleno
+000011A2  2205                     410      MOVE.L D5, D1 ;Color del pen D5, que pasamos a D1 para el trap
+000011A4  103C 0050                411      MOVE.B #T_PEN_COLOR, D0
+000011A8  4E4F                     412      TRAP #15
+000011AA                           413      
+000011AA  2205                     414      MOVE.L D5, D1 ;Lo mismo pero con color de relleno
+000011AC  103C 0051                415      MOVE.B #T_FILL_COLOR, D0
+000011B0  4E4F                     416      TRAP #15
+000011B2                           417      
+000011B2  221F                     418      MOVE.L (A7)+, D1
+000011B4  103C 0058                419      MOVE.B #T_GRAF_ELIPSE, D0 ;Lo dibujamos con esos colores
+000011B8  4E4F                     420      TRAP #15
+000011BA                           421      
+000011BA                           422      ;Por si acaso, ponemos que los colores se reestablezcan
+000011BA                           423      ;a negro para el futuro
+000011BA                           424  
+000011BA  7200                     425              MOVE.L  #$00000000,D1
+000011BC  103C 0050                426              MOVE.B  #T_PEN_COLOR,D0
+000011C0  4E4F                     427              TRAP    #15
+000011C2                           428  
+000011C2  223C 00FFFFFF            429              MOVE.L  #$00FFFFFF,D1 
+000011C8  103C 0051                430              MOVE.B  #T_FILL_COLOR,D0
+000011CC  4E4F                     431              TRAP    #15
+000011CE                           432      
+000011CE  4CDF 003F                433      MOVEM.L (A7)+, D0-D5 ;Los restauramos
+000011D2  4E75                     434      RTS
+000011D4                           435  
+000011D4                           436  DIBUJAR_SPRITE
+000011D4                           437  
+000011D4                           438  
+000011D4  48E7 E080                439          MOVEM.L D0-D2/A0, -(A7) ;Guardamos reg en la pila
+000011D8                           440          
+000011D8  3C02                     441          MOVE.W D2, D6
+000011DA                           442          
+000011DA                           443  
+000011DA  4CDF 0107                444          MOVEM.L (A7)+, D0-D2/A0
+000011DE  4E75                     445          RTS
+000011E0                           446  CARGAR_SONIDO:
+000011E0                           447  
+000011E0                           448  
+000011E0  48E7 C040                449          MOVEM.L D0-D1/A1,-(A7)  ;Guaramos en la pila
+000011E4  103C 0047                450          MOVE.B #T_CARGAR_SO, D0
+000011E8  4E4F                     451          TRAP #15
+000011EA                           452          
+000011EA  4CDF 0203                453          MOVEM.L (A7)+, D0-D1/A1 ;Restauramos los registros
+000011EE  4E75                     454          RTS
+000011F0                           455  REPRODUCIR_SONIDO:
+000011F0                           456  
+000011F0  48E7 C000                457          MOVEM.L D0-D1, -(A7)
+000011F4                           458          
+000011F4  103C 0048                459          MOVE.B #T_REP_SO, D0
+000011F8  4E4F                     460          TRAP #15
+000011FA                           461          
+000011FA  4CDF 0003                462          MOVEM.L (A7)+, D0-D1
+000011FE  4E75                     463          RTS
+00001200                           464  DETENER_SONIDO:
+00001200                           465  
+00001200                           466      *DUDA: Por como está hecho si ponemos música de fondo
+00001200                           467  
+00001200  48E7 E000                468          MOVEM.L D0-D2, -(A7)
+00001204                           469          
+00001204  7403                     470          MOVE.L #3, D2
+00001206  103C 004C                471          MOVE.B #T_CTRL_SO, D0
+0000120A  4E4F                     472          TRAP #15
+0000120C                           473          
+0000120C  4CDF 0007                474          MOVEM.L (A7)+, D0-D2
+00001210  4E75                     475          RTS
+00001212                           476  ABRIR_ARCHIVO:
+00001212                           477  
+00001212  48E7 0040                478          MOVEM.L A1, -(A7) ;GUARDAMOS EL REGISTRO
+00001216  2248                     479          MOVEA.L A0, A1 ;Lo copiamos en a1
+00001218                           480          
+00001218  4A01                     481          TST.B D1 ;Miramos el modo
+0000121A  6600 000A                482          BNE .MODO_CREAR 
+0000121E                           483          
+0000121E  103C 0033                484          MOVE.B #T_ABRIR_ARCHIVO, D0
+00001222  6000 0006                485          BRA .EJECUTAR_TRAP
+00001226                           486          
+00001226                           487  .MODO_CREAR:
+00001226  103C 0034                488          MOVE.B #T_CREAR_ARCHIVO, D0
+0000122A                           489      
+0000122A                           490  .EJECUTAR_TRAP:
+0000122A  4E4F                     491          TRAP #15
+0000122C  4CDF 0200                492          MOVEM.L (A7)+, A1 ;Restauramos el registro A1
+00001230  4E75                     493          RTS
+00001232                           494          
+00001232                           495          
+00001232                           496  LEER_ARCHIVO:
+00001232                           497  
+00001232  48E7 0040                498          MOVEM.L A1, -(A7) 
+00001236  2248                     499          MOVEA.L A0, A1
+00001238  103C 0035                500          MOVE.B #T_LEER_ARCHIVO, D0
+0000123C  4E4F                     501          TRAP #15
+0000123E  4C9F 0200                502          MOVEM (A7)+, A1
+00001242  4E75                     503          RTS    
+00001244                           504          
+00001244                           505          
+00001244                           506  ESCRIBIR_ARCHIVO:
+00001244                           507  
+00001244  48E7 6040                508          MOVEM.L D1-D2/A1, -(A7) 
+00001248  2248                     509          MOVEA.L A0, A1
+0000124A  103C 0036                510          MOVE.B #T_ESCRIBIR_ARCHIVO, D0
+0000124E  4E4F                     511          TRAP #15
+00001250  4C9F 0206                512          MOVEM (A7)+, D1-D2/A1
+00001254  4E75                     513          RTS    
+00001256                           514           
+00001256                           515           
+00001256                           516  CERRAR_ARCHIVO:
+00001256                           517  
+00001256  48E7 4000                518          MOVEM.L D1, -(A7) 
+0000125A                           519          
+0000125A  103C 0038                520          MOVE.B #T_CERRAR_ARCHIVO, D0
+0000125E  4E4F                     521          TRAP #15
+00001260                           522          
+00001260  4CDF 0002                523          MOVEM.L (A7)+, D1
+00001264  4E75                     524          RTS
+00001266                           525  
+00001266                           526  
+00001266                           527  GENERAR_ALEATORIO:
+00001266                           528  
+00001266  48E7 B000                529          MOVEM.L D0/D2-D3, -(A7)
+0000126A  3601                     530          MOVE.W D1, D3 ; En D3 tenemos el limite superior
+0000126C  6700 0024                531          BEQ .FIN ; Si es 0 acaba para evitar problemas de dividir
+00001270                           532          
+00001270  103C 0008                533          MOVE.B #T_TIEMPO_SISTEMA, D0
+00001274  4E4F                     534          TRAP #15 ;Con esto tenemos en D1.L las centesimas de segundo
+00001276                           535                   ;del instante
+00001276                           536          
+00001276                           537          
+00001276                           538          ;Coger el tiempo y usarlo ya de por si puede dar siempre
+00001276                           539          ;los mismos numeros, por eso uso ese numero como seed y le
+00001276                           540          ;hago algunos cambios para que sea mas aleatorio aun
+00001276                           541          
+00001276                           542          ;Esta manera funciona pero no se si podríamos crear otra si
+00001276                           543          ;se nos ocurre alguna mejor
+00001276  D279 000012A0            544          ADD.W (SEED_ALEATORIA), D1
+0000127C  E759                     545          ROL.W #3, D1 ;Rotas bit
+0000127E  0641 3619                546          ADD.W #13849, D1 ;Le sumamos cosas
+00001282  33C1 000012A0            547          MOVE.W D1, (SEED_ALEATORIA)
+00001288                           548          
+00001288  0281 0000FFFF            549          ANDI.L #$0000FFFF, D1 ;Lo limpiamos para quedarnos solo con 
+0000128E                           550                                ;las centesimas
+0000128E  82C3                     551          DIVU D3, D1 
+00001290  4841                     552          SWAP D1
+00001292                           553  
+00001292                           554  .FIN
+00001292  4CDF 000D                555          MOVEM.L (A7)+, D0/D2-D3
+00001296  4E75                     556          RTS
+00001298                           557          
+00001298                           558  FLAG_FRAMES: DS.B    1
+00001299                           559  TECLA_ASCII: DS.B    1
+0000129A                           560  ESTADO_WASD: DS.B    1
+0000129B                           561  EDGE_WASD:   DS.B    1
+0000129C                           562  MOUSE_X:     DS.W    1
+0000129E                           563  MOUSE_Y:     DS.W    1
+000012A0                           564  SEED_ALEATORIA: DS.W 1
+000012A2                           565  MOUSE_CLICK: DS.B    1
+000012A4                           566               DS.W    0
+000012A4                           567  
+000012A4                           568  
+000012A4                           569  
+000012A4                           570  
+000012A4                           571  
+000012A4                           572  
+000012A4                           573  
+000012A4                           574  
+000012A4                           575  -------------------- end include --------------------
+000012A4                           576  
+000012A4                           577      INCLUDE "COWBOY.X68"
+000012A4                           578  
+000012A4                           579  
+000012A4                           580  
+000012A4                           581  
+000012A4                           582  
+000012A4                           583  
+000012A4                           584  
+000012A4                           585  
+000012A4                           586  
+000012A4                           587  
+000012A4                           588  
+000012A4                           589  
+000012A4                           590  
+000012A4                           591  -------------------- end include --------------------
+000012A4                           592  
+000012A4                           593      INCLUDE "CACTUS.X68"
+000012A4                           594  
+000012A4                           595  
+000012A4                           596  
+000012A4                           597  
+000012A4                           598  
+000012A4                           599  
+000012A4                           600  
+000012A4                           601  
+000012A4                           602  
+000012A4                           603  
+000012A4                           604  
+000012A4                           605  
+000012A4                           606  
+000012A4                           607  
+000012A4                           608  
+000012A4                           609  
+000012A4                           610  
+000012A4                           611  
+000012A4                           612  
+000012A4                           613  
+000012A4                           614  
+000012A4                           615  -------------------- end include --------------------
+000012A4                           616  
+000012A4                           617      INCLUDE "LEADERBOARD.X68"
+000012A4                           618  
+000012A4                           619  
+000012A4                           620  
+000012A4                           621  
+000012A4                           622  
+000012A4                           623  
+000012A4                           624  
+000012A4                           625  
+000012A4                           626  
+000012A4                           627  
+000012A4                           628  
+000012A4                           629  -------------------- end include --------------------
+000012A4                           630  
+000012A4                           631      INCLUDE "STAMINA.X68"
+000012A4                           632  
+000012A4                           633  
+000012A4                           634  
+000012A4                           635  
+000012A4                           636  
+000012A4                           637  
+000012A4                           638  
+000012A4                           639  
+000012A4                           640  
+000012A4                           641  
+000012A4                           642  -------------------- end include --------------------
+000012A4                           643  
+000012A4                           644      INCLUDE "CONTADOR.X68"
+000012A4                           645  
+000012A4                           646  
+000012A4                           647  
+000012A4                           648  
+000012A4                           649  
+000012A4                           650  
+000012A4                           651  
+000012A4                           652  -------------------- end include --------------------
+000012A4                           653  
+000012A4                           654      INCLUDE "SONIDOS.X68"
+000012A4                           655  SONIDOS
+000012A4                           656  
+000012A4                           657  -------------------- end include --------------------
+000012A4                           658      
+000012A4  FFFF FFFF                659      SIMHALT             ; halt simulator
+000012A8                           660  
+000012A8                           661  
+000012A8                           662  
+000012A8                           663      END    START        ; last line of source
 
 No errors detected
 No warnings generated
@@ -149,6 +673,10 @@ No warnings generated
 SYMBOL TABLE INFORMATION
 Symbol-name         Value
 -------------------------
+ABRIR_ARCHIVO       1212
+ABRIR_ARCHIVO:EJECUTAR_TRAP  122A
+ABRIR_ARCHIVO:MODO_CREAR  1226
+APLICAR_FPS         106C
 BTN_JUGAR_X1        12C
 BTN_JUGAR_X2        1F4
 BTN_JUGAR_Y1        DC
@@ -159,6 +687,8 @@ BTN_LEADERBOARD_Y1  DC
 BTN_LEADERBOARD_Y2  118
 CACTUS_ALTO         46
 CACTUS_ANCHO        28
+CARGAR_SONIDO       11E0
+CERRAR_ARCHIVO      1256
 COLOR_AMARILLO_FLOR  D7FF
 COLOR_AZUL          FF0000
 COLOR_BLANCO        FFFFFF
@@ -175,15 +705,55 @@ COWBOY_ANCHO        20
 COWBOY_INIT_X       180
 COWBOY_INIT_Y       1B4
 COWBOY_VELOCIDAD    6
+DETENER_SONIDO      1200
+DIBUJAR_ELIPSE      119C
+DIBUJAR_RECTANGULO_RELLENO  1164
+DIBUJAR_SPRITE      11D4
+DIBUJAR_TEXTO_GFX   1164
+EDGE_WASD           129B
+EJECUTAR_JUEGO      1060
+EJECUTAR_LEADERBOARD  1068
+EJECUTAR_MENU       1058
+ESCRIBIR_ARCHIVO    1244
 ESTADO_CACTUS_FLOR  1
 ESTADO_CACTUS_NORMAL  0
+ESTADO_JUEGO        106E
 ESTADO_VAL_JUEGO    1
 ESTADO_VAL_LEADERBOARD  2
 ESTADO_VAL_MENU     0
+ESTADO_WASD         129A
+FLAG_FRAMES         1298
 FPS_OBJETIVO        3C
+GENERAR_ALEATORIO   1266
+GENERAR_ALEATORIO:FIN  1292
+ID_SND_COMER        3
+ID_SND_DISPARO      0
+ID_SND_FLOR         1
+ID_SND_HERIDO       2
+INIT_SYSTEM         1070
+ISR_TIMER           10CA
+LEER_ARCHIVO        1232
+LEER_RATON          1140
+LEER_TECLADO_JUEGO  10D4
+LEER_TECLADO_JUEGO:LOOP  110A
+LEER_TECLADO_JUEGO:PACK_BITS  1106
+LEER_TECLADO_MENU   1114
+LEER_TECLADO_MENU:NOM_PUESTO  113A
+LEER_TECLADO_MENU:NO_ASCII  1134
+MAIN_LOOP           1036
 MAX_CACTUS          4
+MOUSE_CLICK         12A2
+MOUSE_X             129C
+MOUSE_Y             129E
 PANTALLA_ALTO       258
 PANTALLA_ANCHO      320
+PATH_COMER          1020
+PATH_DISPARO        1000
+PATH_FLOR           100C
+PATH_HERIDO         1015
+REPRODUCIR_SONIDO   11F0
+SEED_ALEATORIA      12A0
+SONIDOS             12A4
 SPAWN_TIEMPO        78
 STAMINA_BARRA_ALTO  C8
 STAMINA_BARRA_ANCHO  14
@@ -191,19 +761,31 @@ STAMINA_MAXIMA      64
 STAMINA_POS_X       14
 STAMINA_POS_Y       14
 STAMINA_RESTA_CACTUS  14
-STAMINA_RITMO       1E
+STAMINA_RITMO       3
 STAMINA_SUMA_FLOR   19
-START               1000
+START               102A
+TECLA_ASCII         1299
 T_ABRIR_ARCHIVO     33
-T_CERRAR_ARCHIVO    34
+T_CARGAR_SO         47
+T_CERRAR_ARCHIVO    38
+T_CREAR_ARCHIVO     34
+T_CTRL_SO           4C
 T_ESCRIBIR_ARCHIVO  36
-T_GRAF_INIT         50
-T_GRAF_LIMPIAR      51
+T_FILL_COLOR        51
+T_GRAF_ELIPSE       58
+T_GRAF_INIT         21
+T_GRAF_LIMPIAR      B
 T_GRAF_LINEA        53
 T_GRAF_PIXEL        52
-T_GRAF_TEXTO        54
+T_GRAF_RECT         57
+T_GRAF_TEXTO        5F
+T_LEER4_TECLADO     13
 T_LEER_ARCHIVO      35
-T_LEER_CARACTER     4
-T_LEER_TECLADO      5
+T_LEER_CARACTER     5
+T_LEER_RATON        3D
+T_LEER_TECLADO      7
+T_PEN_COLOR         50
+T_PLAY_WAB_DIREC    46
 T_POSICION_RATON    56
-T_SONIDO            48
+T_REP_SO            48
+T_TIEMPO_SISTEMA    8

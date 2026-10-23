@@ -1,7 +1,7 @@
 *-----------------------------------------------------------
-CONTADOR
-Contador del tiempo que saldrá a la izquierda arriba y se usará
-para poder ordenar el leaderboard y se escribirá ahi.
+*CONTADOR
+*Contador del tiempo que saldrá a la izquierda arriba y se usará
+*para poder ordenar el leaderboard y se escribirá ahi.
 *-----------------------------------------------------------
 
 
@@ -12,6 +12,7 @@ para poder ordenar el leaderboard y se escribirá ahi.
 *conversor a minutos
 
 *dibujar en pantalla
+
 
 
 *~Font name~Courier New~

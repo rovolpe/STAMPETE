@@ -17,18 +17,11 @@
     ORG    $1000
 
 *-----------------------------------------------------------
-* 1. INCLUIR LAOS OTROS MÓDULOS DE CÓDIGO
+* 1. INCLUIR LAOS OTROS MÓDULOS DE CONSTANTES
 *-----------------------------------------------------------
 
     INCLUDE "CONST.X68"
     INCLUDE "SYSCONST.X68"
-    INCLUDE "SYSTEM.X68"
-    INCLUDE "COWBOY.X68"
-    INCLUDE "CACTUS.X68"
-    INCLUDE "LEADERBOARD.X68"
-    INCLUDE "STAMINA.X68"
-    INCLUDE "CONTADOR.X68"
-    INCLUDE "SONIDOS.X68"
     
 *-----------------------------------------------------------
 * 2. INCLUIR LOS MÓDULOS DE DATOS
@@ -36,14 +29,14 @@
 * Si metemos alguno más en el futuro
 
 *-----------------------------------------------------------
-* 3. INICIALIZAR
+* 1. INICIALIZAR
 *-----------------------------------------------------------
 START: 
         BSR INIT_SYSTEM ;Vamos a la subrutina de inicializar
                         ;el sistema SIN HACER
-        BSR CARGAR_LEADERBOARD ; Cargamos los datos guardados
+*        BSR CARGAR_LEADERBOARD ; Cargamos los datos guardados
                                ; POR HACER
-        BSR INICIALIZAR_MENU ; POR HACER
+*       BSR INICIALIZAR_MENU ; POR HACER
         MOVE.B #ESTADO_VAL_MENU, ESTADO_JUEGO ;CONSTANTES AUN
                                               ;SIN DEFINIR
 *-----------------------------------------------------------
@@ -71,49 +64,49 @@ MAIN_LOOP:
 EJECUTAR_MENU:
 
     * ESTO IRA EN EL SYSTEM
-    BSR LEER_TECLADO    ;POR HACER
-    BSR LEER_RATON      ;POR HACER  
-    BSR ACTUALIZAR_MENU ;POR HACER
+    BSR LEER_TECLADO_MENU
+    BSR LEER_RATON  
+   * BSR ACTUALIZAR_MENU ;POR HACER
 
-    BSR LIMPIAR_PANTALLA ; POR HACER
-    BSR DIBUJAR_MENU    ;POR HACER
-    BRA APLICAR_FPS ;POR HACER
+   *BSR LIMPIAR_PANTALLA ; POR HACER
+   *BSR DIBUJAR_MENU    ;POR HACER
+   *BRA APLICAR_FPS ;POR HACER
 
             ;JUEGO
 EJECUTAR_JUEGO:
 
     * ESTO IRA EN EL SYSTEM
-    BSR     LEER_TECLADO ;POR HACER
+    BSR     LEER_TECLADO_JUEGO ;POR HACER
     BSR     LEER_RATON ;POR HACER
 
-    BSR     ACTUALIZAR_COWBOY ;POR HACER
-    BSR     ACTUALIZAR_CACTUS ;POR HACER
-    BSR     ACTUALIZAR_STAMINA  ;POR HACER
-    BSR     ACTUALIZAR_CONTADOR  ;POR HACER
+    *BSR     ACTUALIZAR_COWBOY ;POR HACER
+    *BSR     ACTUALIZAR_CACTUS ;POR HACER
+    *BSR     ACTUALIZAR_STAMINA  ;POR HACER
+    *BSR     ACTUALIZAR_CONTADOR  ;POR HACER
     
     * PANTALLA
-    BSR     LIMPIAR_PANTALLA ;POR HACER
-    BSR     DIBUJAR_FONDO ;POR HACER
-    BSR     DIBUJAR_CACTUS ;POR HACER
-    BSR     DIBUJAR_COWBOY ; POR HACER
-    BSR     DIBUJAR_STAMINA ;POR HACER
-    BSR     DIBUJAR_CONTADOR ;POR HACER
-    BRA     APLICAR_FPS ;POR HACER
+    *BSR     LIMPIAR_PANTALLA ;POR HACER
+    *BSR     DIBUJAR_FONDO ;POR HACER
+   * BSR     DIBUJAR_CACTUS ;POR HACER
+    *BSR     DIBUJAR_COWBOY ; POR HACER
+    *BSR     DIBUJAR_STAMINA ;POR HACER
+    *BSR     DIBUJAR_CONTADOR ;POR HACER
+   * BRA     APLICAR_FPS ;POR HACER
     
 EJECUTAR_LEADERBOARD:
     *ESTO EN EL SYSTEM
     BSR     LEER_RATON ;POR HACER 
-    BSR     ACTUALIZAR_LEADERBOARD ;POR HACER
+    *BSR     ACTUALIZAR_LEADERBOARD ;POR HACER
 
 
-    BSR     LIMPIAR_PANTALLA ;POR HACER
-    BSR     DIBUJAR_LEADERBOARD ;POR HACER
-    BRA     APLICAR_FPS ;POR HACER
+   * BSR     LIMPIAR_PANTALLA ;POR HACER
+    *BSR     DIBUJAR_LEADERBOARD ;POR HACER
+    *BRA     APLICAR_FPS ;POR HACER
 *-----------------------------------------------------------
 * 5. ESPERAR A SINCRONIZACIÓN
 *-----------------------------------------------------------
 APLICAR_FPS:
-    BSR     REGULAR_FPS ;POR HACER
+   * BSR     REGULAR_FPS ;POR HACER
     BRA     MAIN_LOOP   ;POR HACER
 *-----------------------------------------------------------
 * 6. VARIABLES DE ESTADO
@@ -145,6 +138,8 @@ ESTADO_JUEGO:    DS.B    1
 
 
     END    START        ; last line of source
+
+
 
 
 
