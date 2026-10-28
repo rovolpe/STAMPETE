@@ -78,7 +78,7 @@ ISR_TIMER:
 *interrupción periodica de FPS
 *ENTRADA: Nada
 *SALIDA: nada
-*REGISTROS MODIFICADOS:
+*REGISTROS MODIFICADOS: nada
 *-----------------------------------------------------------  
     MOVE.B #1, FLAG_FRAMES
     RTE
@@ -98,11 +98,11 @@ LEER_TECLADO_JUEGO:
 *-----------------------------------------------------------  
         MOVEM.L D0-D3, -(A7) ;Guardamos los registros
         MOVE.B #T_LEER4_TECLADO, D0
-        MOVE.L #'W'<<24+'S'<<16+'A'<<8+'D', D1 ; W A S D
+        MOVE.L #'W'<<24+'A'<<16+'S'<<8+'D', D1 ; W A S D
         TRAP #15
         
         CLR.B D2
-        BSR .PACK_BITS ;Va a meter los 4 bits en d2
+        BSR .PACK_BITS ; Va a meter los 4 bits en d2
         
         MOVE.B (ESTADO_WASD), D0
         NOT.B D0
@@ -128,7 +128,8 @@ LEER_TECLADO_MENU:
 *introducir tu nombre
 
 *ENTRADA: Nada
-*SALIDA: (TECLA_ASCII)
+*SALIDA: Nada (Pero (TECLA_ASCII) se modifica con el valor
+*ascii
 *REGISTROS MODIFICADOS: Nada
 *----------------------------------------------------------- 
 
@@ -159,7 +160,7 @@ LEER_RATON:
 *del ratón
 
 *ENTRADA: Nada
-*SALIDA: (MOUSE_X)(MOUSE_Y), (MOUSE_CLICK)
+*SALIDA: Nada (pero modifica (MOUSE_X)(MOUSE_Y), (MOUSE_CLICK))
 *REGISTROS MODIFICADOS: Nada
 *-----------------------------------------------------------
 
@@ -214,12 +215,14 @@ DIBUJAR_RECTANGULO_RELLENO:
     MOVE.B #T_GRAF_RECT, D0 ;Lo dibujamos con esos colores
     TRAP #15
     
+    
     ;Por si acaso, ponemos que los colores se reestablezcan
-    ;a negro para el futuro
+    ;a blanco para el futuro
 
-            MOVE.L  #$00000000,D1
+            MOVE.L  #$00FFFFFF,D1
             MOVE.B  #T_PEN_COLOR,D0
             TRAP    #15
+
 
             MOVE.L  #$00FFFFFF,D1 
             MOVE.B  #T_FILL_COLOR,D0
@@ -256,9 +259,9 @@ DIBUJAR_ELIPSE:
     TRAP #15
     
     ;Por si acaso, ponemos que los colores se reestablezcan
-    ;a negro para el futuro
+    ;a blanco para el futuro
 
-            MOVE.L  #$00000000,D1
+            MOVE.L  #$0000FFFFFF,D1
             MOVE.B  #T_PEN_COLOR,D0
             TRAP    #15
 
@@ -321,7 +324,7 @@ REPRODUCIR_SONIDO:
 *-----------------------------------------------------------
         MOVEM.L D0-D1, -(A7)
         
-        MOVE.B #T_REP_SO, D0
+        MOVE.B #T_REPRO_SO, D0
         TRAP #15
         
         MOVEM.L (A7)+, D0-D1
@@ -482,6 +485,7 @@ MOUSE_Y:     DS.W    1
 SEED_ALEATORIA: DS.W 1
 MOUSE_CLICK: DS.B    1
              DS.W    0
+
 
 
 
