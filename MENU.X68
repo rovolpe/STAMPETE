@@ -1,23 +1,211 @@
 *-----------------------------------------------------------
-MENU
-Menu que abrirá o el juego o el leaderboard.
-Pedirá al usuario introducir por teclado su nombre al inicio
-de cada juego para luego escribir en terminar la partida.
-*-----------------------------------------------------------
-*inicializar el menu
+*MENU
+*Menu que abrirá o el juego o el leaderboard.
+*Pedirá al usuario introducir por teclado su nombre al inicio
+*de cada juego para luego escribir en terminar la partida.
 
-*logica del menu
-    *actualiza el menu pidiendo el nombre si se pulsa jugar
-    *procesa los clicks para ir a leaderboard o al juego
-    *cambia el estado del juego segun lo que se pulse, cambiando
-    *lo que se hara en main
+
+*SUBRUTINAS:
+
+*MOSTRAR_MENU
+*BORRAR_MENU
+*PROCESAR_MENU
+*-----------------------------------------------------------
+    
+
     
 *dibujo del menu
     *dibujar el titulo, la etiqueta... que se vea bien
     *como hagamos esto puede hacer que tengamos que añadir más 
     *constantes más adelante en CONST.X68
+
+
+*-----------------------------------------------------------
+MOSTRAR_MENU:
+*Muestra el menu
+
+*Entrada: nada
+*Salida: nada
+*Registros modificados: nada
+*-----------------------------------------------------------
+    MOVEM.L D0-D5, -(A7)
+    MOVE.W #BTN_JUGAR_X1, D1
+    MOVE.W #BTN_JUGAR_Y1, D2
+    MOVE.W #BTN_JUGAR_X2, D3
+    MOVE.W #BTN_JUGAR_Y2, D4
+    MOVE.L #$00FF0000, D5
+    
+    BSR DIBUJAR_RECTANGULO_RELLENO
+    MOVEM.L (A7)+, D0-D5
+    BSR PROCESAR_MENU
+    RTS
+
+*-----------------------------------------------------------
+BORRAR_MENU:
+*Borra el menu
+
+*Entrada: nada
+*Salida: nada
+*Registros modificados: nada
+*-----------------------------------------------------------
+    
+
+
+*-----------------------------------------------------------
+PROCESAR_MENU:
+*Analiza que se pulsa en el menu y va a realizar cada accion
+*en cada caso
+
+*Entrada: nada
+*Salida: nada
+*Registros modificados: nada
+*-----------------------------------------------------------
+
+    MOVE.L D0, -(A7)
+    
+    BSR TST_CLICK_JUGAR
+    TST.B D0
+    BNE .ACCION_JUGAR
+    
+    BSR TST_CLICK_LEADERBOARD
+    TST.B D0
+    BNE .ACCION_LEADERBOARD
+    
+    BRA .FIN
+    
+.ACCION_JUGAR:
+    BSR     BORRAR_MENU
+    BSR     PEDIR_NOMBRE
+    ;BSR     EJECUTAR_INICIO_JUEGO
+    BRA     .FIN
+    
+.ACCION_LEADERBOARD
+    ;BSR     EJECUTAR_LEADERBOARD
+    BRA     .FIN
+    
+.FIN
+    MOVEM.L (A7)+, D0
+    RTS
+*-----------------------------------------------------------
+TST_CLICK_JUGAR:
+*Analiza si el ratón está dentro del rectangulo de jugar
+
+*Entrada: (MOUSE_X), (MOUSE_Y), (MOUSE_CLICK)
+*Salida: D0.B = 1 si se ha pulsado dentro del boton, sino 0
+*Registros modificados: D0
+*-----------------------------------------------------------
+    MOVEM.L D1-D2, -(A7) ;Guardamos los registros
+    BSR LEER_RATON ;Actualiza (MOUSE_X)
+    ;(MOUSE_Y) Y (MOUSE_CLICK)
+    
+    ;Primero miramos si se ha clickado
+    MOVE.B MOUSE_CLICK, D0
+    BTST #0, D0
+    BEQ .NO_PULSADO
+
+    MOVE.W MOUSE_X, D1
+    SUB.W #BTN_JUGAR_X1, D1     *MOUSE_X - BTN_JUGAR_X1
+    BMI     .NO_PULSADO        *Si es negativo salta
+    
+        
+    MOVE.W #BTN_JUGAR_X2, D1
+    SUB.W MOUSE_X, D1  *MOUSE_X - BTN_JUGAR_X2
+    BMI     .NO_PULSADO
+    
+    
+    MOVE.W MOUSE_Y, D2
+    SUB.W #BTN_JUGAR_Y1, D2     *MOUSE_Y - BTN_JUGAR_Y1
+    BMI .NO_PULSADO
+        
+        
+    MOVE.W #BTN_JUGAR_Y2, D2
+    SUB.W MOUSE_Y, D2     *MOUSE_Y - BTN_JUGARY2
+    BMI .NO_PULSADO
+    
+    MOVE.B #1, D0
+    BRA     .FIN        
+    *COMPRUEBAS SI (MOUSE_CLICK) SE HA PRODUCIDO
+    *SINO SALTAS
+    
+.NO_PULSADO:
+    CLR.B D0
+
+.FIN:
+    MOVEM.L (A7)+, D1-D2
+    RTS
+    
+
+*-----------------------------------------------------------
+TST_CLICK_LEADERBOARD:
+*Analiza si el ratón está dentro del rectangulo de jugar
+
+*Entrada: (MOUSE_X), (MOUSE_Y), (MOUSE_CLICK)
+*Salida: D0.B = 1 si se ha pulsado dentro del boton, sino 0
+*Registros modificados: D0
+*-----------------------------------------------------------
+    MOVEM.L D1-D2, -(A7) ;Guardamos los registros
+    BSR LEER_RATON ;Actualiza (MOUSE_X)
+    ;(MOUSE_Y) Y (MOUSE_CLICK)
+    
+    ;Primero miramos si se ha clickado
+    MOVE.B MOUSE_CLICK, D0
+    BTST #0, D0
+    BEQ .NO_PULSADO
+
+    MOVE.W MOUSE_X, D1
+    SUB.W BTN_LEADERBOARD_X1, D1     *MOUSE_X - BTN_JUGAR_X1
+    BMI     .NO_PULSADO        *Si es negativo salta
+    
+        
+    MOVE.W #BTN_LEADERBOARD_X2, D1
+    SUB.W MOUSE_X, D1  *MOUSE_X - BTN_JUGAR_X2
+    BMI     .NO_PULSADO
+    
+    
+    MOVE.W MOUSE_Y, D2
+    SUB.W #BTN_LEADERBOARD_Y1, D2     *MOUSE_Y - BTN_JUGAR_Y1
+    BMI .NO_PULSADO
+        
+        
+    MOVE.W #BTN_LEADERBOARD_Y2, D2
+    SUB.W MOUSE_Y, D2     *MOUSE_Y - BTN_JUGARY2
+    BMI .NO_PULSADO
+    
+    MOVE.B #1, D0
+    BRA     .FIN        
+    *COMPRUEBAS SI (MOUSE_CLICK) SE HA PRODUCIDO
+    *SINO SALTAS
+    
+.NO_PULSADO:
+    CLR.B D0
+
+.FIN:
+    MOVEM.L (A7)+, D1-D2
+    RTS
+    
+
+PEDIR_NOMBRE:
+*Ha de mostrar un menu en el que pide un nombre, se
+*ha de introducir y luego ha de cambiar el estado
+*del juego al de jugar
+
+    MOVE.W #BTN_JUGAR_X1, D1
+    MOVE.W #BTN_JUGAR_Y1, D2
+    MOVE.W #BTN_JUGAR_X2, D3
+    MOVE.W #BTN_JUGAR_Y2, D4
+    MOVE.L #$0000FF00, D5
+    
+    BSR DIBUJAR_RECTANGULO_RELLENO
+    RTS
+
+*Ha de cambiar el estado del juego al de leaderboard
     
 *guarda la variable del nombre del jugador y su longitud
+
+
+
+
+
 
 
 

@@ -22,6 +22,7 @@
 
     INCLUDE "CONST.X68"
     INCLUDE "SYSCONST.X68"
+    INCLUDE "MENU.X68"
     
 *-----------------------------------------------------------
 * 2. INCLUIR LOS MÓDULOS DE DATOS
@@ -32,6 +33,7 @@
 * 1. INICIALIZAR
 *-----------------------------------------------------------
 START: 
+    BSR MOSTRAR_MENU
         BSR INIT_SYSTEM ;Vamos a la subrutina de inicializar
                         ;el sistema SIN HACER
 *        BSR CARGAR_LEADERBOARD ; Cargamos los datos guardados
@@ -62,7 +64,7 @@ MAIN_LOOP:
                 ;MENU
 
 EJECUTAR_MENU:
-
+    BSR MOSTRAR_MENU
     * ESTO IRA EN EL SYSTEM
     BSR LEER_TECLADO_MENU
     BSR LEER_RATON  
@@ -138,6 +140,8 @@ ESTADO_JUEGO:    DS.B    1
 
 
     END    START        ; last line of source
+
+
 
 
 

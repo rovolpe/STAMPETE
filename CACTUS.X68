@@ -15,15 +15,17 @@
 
 
 *-----------------------------------------------------------
-*1. INICIALIZACIÓN
+CACTUS_INIT
 *-----------------------------------------------------------
 
 *INICIALIZAR CACTUS
 *   Resetear el temporizador de generación
 *   Desactivar todos los cactus de memoria
 
+.CACTUS_GEN
+
 *-----------------------------------------------------------
-*2. LÓGICA DEL JUEGO
+CACTUS_UPDATE
 *-----------------------------------------------------------
 
 *UNA SUBRUTINA PRINCIPAL QUE ACUALIZA EL CACTUS
@@ -42,12 +44,10 @@
 *       Si colisiona y el estado es normal resta stamina y ralentiza al cowboy 
 *       Y si es una flor suma la stamina y libera el slot del cactus
 
-*-----------------------------------------------------------
-*3. DIBUJO
-*-----------------------------------------------------------
-*Dibujar cactus
-*Dibuja todos los cactus activos distintos según el estado del cactus
-
+.CACTUS_UPDT_NORMAL
+    RTS
+.CACTUS_UPDT_FLOR
+    RTS
 
 * CONSTANTES DE ESTADOS
 
@@ -63,6 +63,7 @@
 *Si está activo o no
 *Coords X e Y
 *Estado del cactus
+
 
 
 

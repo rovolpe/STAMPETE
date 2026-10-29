@@ -7,15 +7,13 @@
 *que creo que seria mas facil
 
 *-----------------------------------------------------------
-
-*1. INICIALIZAR
-
+COWBOY_INIT
 *-----------------------------------------------------------
 * Lo inicializa
 * Limpia las balas
 
 *-----------------------------------------------------------
-*2. LÓGICA JUEGO
+COWBOY_UPDATE
 *-----------------------------------------------------------
 *Actualiza el cowboy
 
@@ -23,7 +21,7 @@
 *leer las teclas y mover a cada dirección
 
 *-----------------------------------------------------------
-*3. PROCESAMIENTO DE LOS DISPAROS
+BULLET_INIT
 *-----------------------------------------------------------
 
 *Gestiona un cooldown (supongo)
@@ -31,18 +29,14 @@
 *Crea la bala
 
 *-----------------------------------------------------------
-*4. MOVER LAS BALAS
+BULLET_UPDATE
 *-----------------------------------------------------------
 *Mover las balas a la coordenada clickada
 *Bucle que comprueba cuando borrarla (si choca o se va fuera
 * de la pantalla)
 *borrar la bala
 
-*-----------------------------------------------------------
-*5. DIBUJAR EL COWBOY
-*-----------------------------------------------------------
-*DIBUJAR EL COWBOY
-*DIBUJAR LAS BALAS
+
 
 
 *-----------------------------------------------------------
@@ -51,6 +45,7 @@
 *COORDENADAS
 *Temp que cuenta el tiempo que esté ralentizado
 *coord de las balas
+
 
 
 *~Font name~Courier New~

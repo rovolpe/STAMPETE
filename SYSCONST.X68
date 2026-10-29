@@ -41,13 +41,15 @@ T_ESCRIBIR_ARCHIVO  EQU 54
 
 T_PLAY_WAB_DIREC    EQU 70
 T_CARGAR_SO         EQU 71
-T_REP_SO            EQU 72
+T_REPRO_SO          EQU 72
 T_CTRL_SO           EQU 76
 
 
 T_POSICION_RATON    EQU 86
 ;FPS TOTALES
 ;por definir
+
+
 
 
 
