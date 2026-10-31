@@ -33,14 +33,10 @@
 * 1. INICIALIZAR
 *-----------------------------------------------------------
 START: 
-    BSR MOSTRAR_MENU
         BSR INIT_SYSTEM ;Vamos a la subrutina de inicializar
                         ;el sistema SIN HACER
-*        BSR CARGAR_LEADERBOARD ; Cargamos los datos guardados
-                               ; POR HACER
-*       BSR INICIALIZAR_MENU ; POR HACER
-        MOVE.B #ESTADO_VAL_MENU, ESTADO_JUEGO ;CONSTANTES AUN
-                                              ;SIN DEFINIR
+        MOVE.B #ESTADO_VAL_MENU, ESTADO_JUEGO
+        BSR     MOSTRAR_MENU
 *-----------------------------------------------------------
 * 4. ACTUALIZAR
 *-----------------------------------------------------------
@@ -57,60 +53,27 @@ MAIN_LOOP:
     BEQ EJECUTAR_JUEGO ;POR HACER
     
     CMP.B #ESTADO_VAL_LEADERBOARD, D0 ;Si es leaderboard lo mismo
-    BEQ EJECUTAR_JUEGO ; POR HACER
+    BEQ EJECUTAR_LEADERBOARD ; POR HACER
     
     BRA APLICAR_FPS ;APLICAMOS LOS FPS QUE TOCAN POR HACER
     
                 ;MENU
 
 EJECUTAR_MENU:
-    BSR MOSTRAR_MENU
-    * ESTO IRA EN EL SYSTEM
-    BSR LEER_TECLADO_MENU
-    BSR LEER_RATON  
-   * BSR ACTUALIZAR_MENU ;POR HACER
-
-   *BSR LIMPIAR_PANTALLA ; POR HACER
-   *BSR DIBUJAR_MENU    ;POR HACER
-   *BRA APLICAR_FPS ;POR HACER
+    BSR PROCESAR_MENU
+    BRA APLICAR_FPS
 
             ;JUEGO
 EJECUTAR_JUEGO:
-
-    * ESTO IRA EN EL SYSTEM
-    BSR     LEER_TECLADO_JUEGO ;POR HACER
-    BSR     LEER_RATON ;POR HACER
-
-    *BSR     ACTUALIZAR_COWBOY ;POR HACER
-    *BSR     ACTUALIZAR_CACTUS ;POR HACER
-    *BSR     ACTUALIZAR_STAMINA  ;POR HACER
-    *BSR     ACTUALIZAR_CONTADOR  ;POR HACER
-    
-    * PANTALLA
-    *BSR     LIMPIAR_PANTALLA ;POR HACER
-    *BSR     DIBUJAR_FONDO ;POR HACER
-   * BSR     DIBUJAR_CACTUS ;POR HACER
-    *BSR     DIBUJAR_COWBOY ; POR HACER
-    *BSR     DIBUJAR_STAMINA ;POR HACER
-    *BSR     DIBUJAR_CONTADOR ;POR HACER
-   * BRA     APLICAR_FPS ;POR HACER
-    
+    BRA APLICAR_FPS
 EJECUTAR_LEADERBOARD:
-    *ESTO EN EL SYSTEM
-    BSR     LEER_RATON ;POR HACER 
-    *BSR     ACTUALIZAR_LEADERBOARD ;POR HACER
-
-
-   * BSR     LIMPIAR_PANTALLA ;POR HACER
-    *BSR     DIBUJAR_LEADERBOARD ;POR HACER
-    *BRA     APLICAR_FPS ;POR HACER
 *-----------------------------------------------------------
 * 5. ESPERAR A SINCRONIZACIÓN
 *-----------------------------------------------------------
 APLICAR_FPS:
-   * BSR     REGULAR_FPS ;POR HACER
-    BRA     MAIN_LOOP   ;POR HACER
-*-----------------------------------------------------------
+        BSR     ESPERAR_FPS   
+        BRA     MAIN_LOOP 
+*-----------------------------------------------------------    
 * 6. VARIABLES DE ESTADO
 *-----------------------------------------------------------
 ESTADO_JUEGO:    DS.B    1
@@ -140,6 +103,8 @@ ESTADO_JUEGO:    DS.B    1
 
 
     END    START        ; last line of source
+
+
 
 
 

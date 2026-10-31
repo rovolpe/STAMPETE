@@ -8,6 +8,7 @@
 *Lista de subrutinas:
 
 *INIT_SYSTEM
+*REGULAR_FPS
 *ISR_TIMER
 *LEER_TECLADO_JUEGO
 *LEER_TECLADO_MENU
@@ -57,7 +58,7 @@ INIT_SYSTEM:
     
     ;limpiamos la pantalla
     MOVE.B #T_GRAF_LIMPIAR, D0
-    MOVE.W #$FF00, D1
+    MOVE.W #$0000, D1
     TRAP #15
     ;reiniciamos variables
     CLR.B   TECLA_ASCII
@@ -71,7 +72,31 @@ INIT_SYSTEM:
     MOVEM.L (A7)+, D0-D2
     RTS
     
-    
+ESPERAR_FPS:
+        MOVEM.L D0-D1, -(A7)
+        MOVE.L #3, D1
+        MOVE.B #T_ESPERAR, D0
+        TRAP #15
+        MOVEM.L (A7)+, D0-D1
+        RTS
+*-----------------------------------------------------------
+REGULAR_FPS:
+*Activa el flag cada x tiempo para los fps
+*ENTRADA: Nada
+*SALIDA: nada
+*REGISTROS MODIFICADOS: Nada
+*-----------------------------------------------------------  
+    MOVEM.L D0-D1, -(A7)
+    MOVE.L #3, D1 *Este 3 son las centesimas de segundo de pausa, hay que 
+                  *crear una constante que lo calcule en base de los fps
+                  *que quiera el usuario, pero por ahora lo dejo en 3 que iria
+                  *a 33fps aprox
+    MOVE.B #T_ESPERAR, D0
+    TRAP #15
+    MOVEM.L (A7)+, D0-D1
+    RTS
+ 
+   
 *-----------------------------------------------------------  
 ISR_TIMER:
 *Mete en el flag que creamos un 1 si se activa
@@ -469,7 +494,7 @@ GENERAR_ALEATORIO:
         DIVU D3, D1 
         SWAP D1
 
-.FIN
+.FIN:
         MOVEM.L (A7)+, D0/D2-D3
         RTS
         
@@ -485,6 +510,8 @@ MOUSE_Y:     DS.W    1
 SEED_ALEATORIA: DS.W 1
 MOUSE_CLICK: DS.B    1
              DS.W    0
+
+
 
 
 

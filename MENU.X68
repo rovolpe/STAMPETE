@@ -14,11 +14,6 @@
     
 
     
-*dibujo del menu
-    *dibujar el titulo, la etiqueta... que se vea bien
-    *como hagamos esto puede hacer que tengamos que añadir más 
-    *constantes más adelante en CONST.X68
-
 
 *-----------------------------------------------------------
 MOSTRAR_MENU:
@@ -28,6 +23,8 @@ MOSTRAR_MENU:
 *Salida: nada
 *Registros modificados: nada
 *-----------------------------------------------------------
+
+    MOVE.B #0, ESTADO_JUEGO
     MOVEM.L D0-D5, -(A7)
     MOVE.W #BTN_JUGAR_X1, D1
     MOVE.W #BTN_JUGAR_Y1, D2
@@ -36,8 +33,16 @@ MOSTRAR_MENU:
     MOVE.L #$00FF0000, D5
     
     BSR DIBUJAR_RECTANGULO_RELLENO
+    
+    
+    MOVE.W #BTN_LEADERBOARD_X1, D1
+    MOVE.W #BTN_LEADERBOARD_Y1, D2
+    MOVE.W #BTN_LEADERBOARD_X2, D3
+    MOVE.W #BTN_LEADERBOARD_Y2, D4
+    MOVE.L #$000000FF, D5
+    
+    BSR DIBUJAR_RECTANGULO_RELLENO
     MOVEM.L (A7)+, D0-D5
-    BSR PROCESAR_MENU
     RTS
 
 *-----------------------------------------------------------
@@ -49,7 +54,7 @@ BORRAR_MENU:
 *Registros modificados: nada
 *-----------------------------------------------------------
     
-
+RTS
 
 *-----------------------------------------------------------
 PROCESAR_MENU:
@@ -76,15 +81,15 @@ PROCESAR_MENU:
 .ACCION_JUGAR:
     BSR     BORRAR_MENU
     BSR     PEDIR_NOMBRE
-    ;BSR     EJECUTAR_INICIO_JUEGO
+    MOVE.B  #1, ESTADO_JUEGO
     BRA     .FIN
     
 .ACCION_LEADERBOARD
-    ;BSR     EJECUTAR_LEADERBOARD
+    MOVE.B  #2 , ESTADO_JUEGO
     BRA     .FIN
     
 .FIN
-    MOVEM.L (A7)+, D0
+    MOVE.L (A7)+, D0
     RTS
 *-----------------------------------------------------------
 TST_CLICK_JUGAR:
@@ -153,7 +158,7 @@ TST_CLICK_LEADERBOARD:
     BEQ .NO_PULSADO
 
     MOVE.W MOUSE_X, D1
-    SUB.W BTN_LEADERBOARD_X1, D1     *MOUSE_X - BTN_JUGAR_X1
+    SUB.W #BTN_LEADERBOARD_X1, D1     *MOUSE_X - BTN_JUGAR_X1
     BMI     .NO_PULSADO        *Si es negativo salta
     
         
@@ -172,6 +177,19 @@ TST_CLICK_LEADERBOARD:
     BMI .NO_PULSADO
     
     MOVE.B #1, D0
+    
+    
+    *Quitar luego, si se ha pulsado lo pinta de verde 
+        *para testing
+    MOVEM.L D0-D5, -(A7)
+    MOVE.W #BTN_LEADERBOARD_X1, D1
+    MOVE.W #BTN_LEADERBOARD_Y1, D2
+    MOVE.W #BTN_LEADERBOARD_X2, D3
+    MOVE.W #BTN_LEADERBOARD_Y2, D4
+    MOVE.L #$0000FF00, D5
+    
+    BSR DIBUJAR_RECTANGULO_RELLENO
+    MOVEM.L (A7)+, D0-D5
     BRA     .FIN        
     *COMPRUEBAS SI (MOUSE_CLICK) SE HA PRODUCIDO
     *SINO SALTAS
@@ -188,7 +206,7 @@ PEDIR_NOMBRE:
 *Ha de mostrar un menu en el que pide un nombre, se
 *ha de introducir y luego ha de cambiar el estado
 *del juego al de jugar
-
+    MOVEM.L D0-D5, -(A7)
     MOVE.W #BTN_JUGAR_X1, D1
     MOVE.W #BTN_JUGAR_Y1, D2
     MOVE.W #BTN_JUGAR_X2, D3
@@ -196,11 +214,14 @@ PEDIR_NOMBRE:
     MOVE.L #$0000FF00, D5
     
     BSR DIBUJAR_RECTANGULO_RELLENO
+    MOVEM.L (A7)+, D0-D5
     RTS
+    
 
 *Ha de cambiar el estado del juego al de leaderboard
     
 *guarda la variable del nombre del jugador y su longitud
+
 
 
 

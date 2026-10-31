@@ -44,10 +44,13 @@ T_CARGAR_SO         EQU 71
 T_REPRO_SO          EQU 72
 T_CTRL_SO           EQU 76
 
+T_ESPERAR           EQU 32
+
 
 T_POSICION_RATON    EQU 86
 ;FPS TOTALES
 ;por definir
+
 
 
 
