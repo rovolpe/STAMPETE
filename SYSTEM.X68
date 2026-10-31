@@ -26,6 +26,7 @@
 *CERRAR_ARCHIVO                         
 *GENERAR_ALEATORIO                            (*)
 *BORRAR_PANTALLA
+*ESPERAR_1S
 *-----------------------------------------------------------
 
 *-----------------------------------------------------------
@@ -519,11 +520,25 @@ BORRAR_PANTALLA:
 
     MOVEM.L D0-D1, -(A7)
     MOVE.B #T_GRAF_LIMPIAR, D0
-    MOVE.L #$00000000, D1
+    MOVE.W #$FF00, D1
     TRAP #15
     MOVEM.L (A7)+, D0-D1
     RTS
 *-----------------------------------------------------------
+
+*-----------------------------------------------------------
+GUARDAR_TIEMPO_SISTEMA:
+*Descripción: Te guarda el tiempo del sistema
+
+*ENTRADA: nada
+*SALIDA: D1
+*REGISTROS MODIFICADOS:  D1
+*-----------------------------------------------------------
+    MOVE.L D0, -(A7)
+    MOVE.B #T_TIEMPO_SISTEMA, D0
+    TRAP #15
+    MOVE.L (A7)+, D0
+    RTS
 *-----------------------------------------------------------
 *VARIABLES
 FLAG_FRAMES: DS.B    1
@@ -535,6 +550,9 @@ MOUSE_Y:     DS.W    1
 SEED_ALEATORIA: DS.W 1
 MOUSE_CLICK: DS.B    1
              DS.W    0
+
+
+
 
 
 

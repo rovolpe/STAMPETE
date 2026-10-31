@@ -71,11 +71,12 @@ PROCESAR_MENU:
     BSR     BORRAR_PANTALLA
     BSR     PEDIR_NOMBRE
     BSR     INIT_STAMINA
-    MOVE.B  #1, ESTADO_JUEGO
+    BSR     INIT_CONTADOR
+    MOVE.B  #ESTADO_VAL_JUEGO, ESTADO_JUEGO
     BRA     .FIN
     
 .ACCION_LEADERBOARD:
-    MOVE.B  #2 , ESTADO_JUEGO
+    MOVE.B  #ESTADO_VAL_LEADERBOARD , ESTADO_JUEGO
     BRA     .FIN
     
 .FIN:
@@ -196,22 +197,15 @@ PEDIR_NOMBRE:
 *Ha de mostrar un menu en el que pide un nombre, se
 *ha de introducir y luego ha de cambiar el estado
 *del juego al de jugar
-    MOVEM.L D0-D5, -(A7)
-    MOVE.W #BTN_JUGAR_X1, D1
-    MOVE.W #BTN_JUGAR_Y1, D2
-    MOVE.W #BTN_JUGAR_X2, D3
-    MOVE.W #BTN_JUGAR_Y2, D4
-    MOVE.L #$0000FF00, D5
-    
-    BSR DIBUJAR_RECTANGULO_RELLENO
-    MOVEM.L (A7)+, D0-D5
-    
+
     RTS
     
 
 *Ha de cambiar el estado del juego al de leaderboard
     
 *guarda la variable del nombre del jugador y su longitud
+
+
 
 
 
