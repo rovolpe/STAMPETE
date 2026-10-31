@@ -22,7 +22,6 @@
 
     INCLUDE "CONST.X68"
     INCLUDE "SYSCONST.X68"
-    INCLUDE "MENU.X68"
     
 *-----------------------------------------------------------
 * 2. INCLUIR LOS MÓDULOS DE DATOS
@@ -57,14 +56,15 @@ MAIN_LOOP:
     
     BRA APLICAR_FPS ;APLICAMOS LOS FPS QUE TOCAN POR HACER
     
-                ;MENU
-
+    ;MENU
 EJECUTAR_MENU:
     BSR PROCESAR_MENU
     BRA APLICAR_FPS
 
-            ;JUEGO
+    ;JUEGO
 EJECUTAR_JUEGO:
+    BSR BORRAR_PANTALLA
+    BSR DIBUJAR_STAMINA
     BRA APLICAR_FPS
 EJECUTAR_LEADERBOARD:
 *-----------------------------------------------------------
@@ -76,6 +76,7 @@ APLICAR_FPS:
 *-----------------------------------------------------------    
 * 6. VARIABLES DE ESTADO
 *-----------------------------------------------------------
+                 DS.W    0
 ESTADO_JUEGO:    DS.B    1
                  DS.W    0
 
@@ -85,6 +86,8 @@ ESTADO_JUEGO:    DS.B    1
 *-----------------------------------------------------------
 
     INCLUDE "SYSTEM.X68"
+    
+    INCLUDE "MENU.X68"
 
     INCLUDE "COWBOY.X68"
 
@@ -103,6 +106,9 @@ ESTADO_JUEGO:    DS.B    1
 
 
     END    START        ; last line of source
+
+
+
 
 
 

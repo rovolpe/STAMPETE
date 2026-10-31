@@ -25,6 +25,7 @@
 *ESCRIBIR_ARCHIVO                       
 *CERRAR_ARCHIVO                         
 *GENERAR_ALEATORIO                            (*)
+*BORRAR_PANTALLA
 *-----------------------------------------------------------
 
 *-----------------------------------------------------------
@@ -226,6 +227,12 @@ DIBUJAR_RECTANGULO_RELLENO:
 *REGISTROS MODIFICADOS: Nada
 *-----------------------------------------------------------
     MOVEM.L D0-D5, -(A7) ;Guardamos los registros
+    *Añadi esto porque daba error por basura que tenia en los bits altos
+    ANDI.L #$0000FFFF, D1
+    ANDI.L #$0000FFFF, D2
+    ANDI.L #$0000FFFF, D3
+    ANDI.L #$0000FFFF, D4
+
     MOVE.L D1, -(A7) ;Metemos en la pila D1 ya que primero hay
                      ;que definir el color del relleno
     MOVE.L D5, D1 ;Color del pen D5, que pasamos a D1 para el trap
@@ -498,6 +505,24 @@ GENERAR_ALEATORIO:
         MOVEM.L (A7)+, D0/D2-D3
         RTS
         
+        
+        
+        
+*-----------------------------------------------------------
+BORRAR_PANTALLA:
+*Descripción: Borra la pantalla y la pone en negro
+
+*ENTRADA: nada
+*SALIDA: nada
+*REGISTROS MODIFICADOS:  nada
+*-----------------------------------------------------------
+
+    MOVEM.L D0-D1, -(A7)
+    MOVE.B #T_GRAF_LIMPIAR, D0
+    MOVE.L #$00000000, D1
+    TRAP #15
+    MOVEM.L (A7)+, D0-D1
+    RTS
 *-----------------------------------------------------------
 *-----------------------------------------------------------
 *VARIABLES
@@ -510,6 +535,8 @@ MOUSE_Y:     DS.W    1
 SEED_ALEATORIA: DS.W 1
 MOUSE_CLICK: DS.B    1
              DS.W    0
+
+
 
 
 

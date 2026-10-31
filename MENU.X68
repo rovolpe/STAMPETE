@@ -46,17 +46,6 @@ MOSTRAR_MENU:
     RTS
 
 *-----------------------------------------------------------
-BORRAR_MENU:
-*Borra el menu
-
-*Entrada: nada
-*Salida: nada
-*Registros modificados: nada
-*-----------------------------------------------------------
-    
-RTS
-
-*-----------------------------------------------------------
 PROCESAR_MENU:
 *Analiza que se pulsa en el menu y va a realizar cada accion
 *en cada caso
@@ -79,16 +68,17 @@ PROCESAR_MENU:
     BRA .FIN
     
 .ACCION_JUGAR:
-    BSR     BORRAR_MENU
+    BSR     BORRAR_PANTALLA
     BSR     PEDIR_NOMBRE
+    BSR     INIT_STAMINA
     MOVE.B  #1, ESTADO_JUEGO
     BRA     .FIN
     
-.ACCION_LEADERBOARD
+.ACCION_LEADERBOARD:
     MOVE.B  #2 , ESTADO_JUEGO
     BRA     .FIN
     
-.FIN
+.FIN:
     MOVE.L (A7)+, D0
     RTS
 *-----------------------------------------------------------
@@ -215,12 +205,17 @@ PEDIR_NOMBRE:
     
     BSR DIBUJAR_RECTANGULO_RELLENO
     MOVEM.L (A7)+, D0-D5
+    
     RTS
     
 
 *Ha de cambiar el estado del juego al de leaderboard
     
 *guarda la variable del nombre del jugador y su longitud
+
+
+
+
 
 
 
