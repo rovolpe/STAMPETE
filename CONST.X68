@@ -5,9 +5,8 @@
 ;CONSTANTES DEL COWBOY
 COWBOY_INIT_X        EQU 384 ;Puse eso por poner
 COWBOY_INIT_Y        EQU 436 ;lo mismo
-COWBOY_VELOCIDAD     EQU 6
-COWBOY_ANCHO         EQU 32
-COWBOY_ALTO          EQU 64
+COWBOY_VELOCIDAD     EQU 1
+COWBOY_RADIO      EQU 15 ;Por ahora es un circulo
 
 ;CONSTANTES DEL CACTUS
 MAX_CACTUS           EQU 4
@@ -20,7 +19,7 @@ ESTADO_CACTUS_FLOR   EQU 1
 
 ;CONSTANTES DE LA BARRA DE STAMINA
 
-STAMINA_MAX          EQU 100
+STAMINA_MAX          EQU 5000
 STAMINA_RITMO        EQU 3
 STAMINA_RESTA_CACTUS EQU 20
 STAMINA_SUMA_FLOR    EQU 25
@@ -57,25 +56,27 @@ COLOR_FONDO             EQU $0080C0FF
 COLOR_GRIS_MARCO        EQU $00808080
 
 
-;Me he inventado algunos pero habría que poner
+;Me he inventado algunos pero habría que poner  
 ;uno por audio
 *EFECTOS DE SONIDO: IDS
 ID_SND_DISPARO  EQU 0
 ID_SND_FLOR     EQU 1
 ID_SND_HERIDO   EQU 2
 ID_SND_COMER    EQU 3
+     
+                         
+COWBOY_X_MIN    EQU 40
+COWBOY_X_MAX    EQU 700
+COWBOY_Y_MIN    EQU 120
+COWBOY_Y_MAX    EQU 530
+                         
+COWBOY_DELAY_MAX    EQU 7 ;El cooldown para que se mueva el cowboy, lo añadi porque se movia demasiado rapido
+STAMINA_DELAY_MAX   EQU 33 ;LO MISMO PARA LA BARRA DE STAMINA
 
 
 
-*RUTAS ARCHIVOS
-PATH_DISPARO:   DC.B    'disparo.wav',0
-                DC.W 0
-PATH_FLOR:      DC.B    'flor.wav',0
-                DC.W 0
-PATH_HERIDO:    DC.B    'herido.wav',0
-                DC.W 0
-PATH_COMER:     DC.B    'comer.wav',0
-                DC.W 0
+
+
 
 
 

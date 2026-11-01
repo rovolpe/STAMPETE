@@ -33,7 +33,8 @@
 *-----------------------------------------------------------
 START: 
         BSR INIT_SYSTEM ;Vamos a la subrutina de inicializar
-                        ;el sistema SIN HACER
+        BSR COWBOY_INIT
+        BSR COWBOY_DRAW
         MOVE.B #ESTADO_VAL_MENU, ESTADO_JUEGO
         BSR     MOSTRAR_MENU
 *-----------------------------------------------------------
@@ -64,7 +65,9 @@ EJECUTAR_MENU:
     ;JUEGO
 EJECUTAR_JUEGO:
     BSR ACTUALIAR_CONTADOR
+    BSR CONSUMIR_STAMINA
     BSR DIBUJAR_STAMINA
+    BSR COWBOY_UPDATE
     BRA APLICAR_FPS
 EJECUTAR_LEADERBOARD:
 *-----------------------------------------------------------
@@ -89,8 +92,6 @@ ESTADO_JUEGO:    DS.B    1
     
     INCLUDE "MENU.X68"
 
-    INCLUDE "COWBOY.X68"
-
     INCLUDE "CACTUS.X68"
 
     INCLUDE "LEADERBOARD.X68"
@@ -101,11 +102,18 @@ ESTADO_JUEGO:    DS.B    1
 
     INCLUDE "SONIDOS.X68"
     
+    INCLUDE "COWBOY.X68"
+    
     SIMHALT             ; halt simulator
 
 
 
     END    START        ; last line of source
+
+
+
+
+
 
 
 

@@ -71,15 +71,46 @@ DIBUJAR_STAMINA:
 .FIN:
     MOVEM.L (A7)+, D0-D6
     RTS
-*CONSUMIR_STAMINA:
+CONSUMIR_STAMINA:
+*------------------------------------------------------------
+CONSUMIR_STAMINA:
+*Descripción: Va reduciendo la stamina cada x fotogramas (la constante)
+*Entrada: nada
+*Salida:  nada
+*Registros modificados: nada
+*------------------------------------------------------------
+    MOVEM.L D0-D1, -(A7)
+    ;Vamos a usar un delay para que baje mas lento
+    ;Exactamente igual que con el movimiento del cowboy
+    MOVE.W STAMINA_CONT_DELAY, D0
+    ADDQ.W #1, D0
+    CMP.W #STAMINA_DELAY_MAX, D0
+    BLT .GUARDAR_DELAY
+    
+    MOVE.W #0, STAMINA_CONT_DELAY
+    
+    MOVE.W STAMINA_ACTUAL, D0
+    CMP.W #0, D0
+    BEQ .FIN
+    
+    SUBQ.W #1, D0
+    MOVE.W D0, STAMINA_ACTUAL
+    BRA .FIN
+    
+.GUARDAR_DELAY:
+    MOVE.W D0, STAMINA_CONT_DELAY
 
+.FIN:
+    MOVEM.L (A7)+, D0-D1
+    RTS
 *DAR_STAMINA:
 
 
 *--------------------------------------------------------
 *Variables
 STAMINA_ACTUAL: DS.W 1
-                DS.W 0
+STAMINA_CONT_DELAY:   DS.W 1
+
 
 
 
