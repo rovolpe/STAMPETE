@@ -34,7 +34,6 @@
 START: 
         BSR INIT_SYSTEM ;Vamos a la subrutina de inicializar
         BSR COWBOY_INIT
-        BSR COWBOY_DRAW
         MOVE.B #ESTADO_VAL_MENU, ESTADO_JUEGO
         BSR     MOSTRAR_MENU
 *-----------------------------------------------------------
@@ -64,6 +63,7 @@ EJECUTAR_MENU:
 
     ;JUEGO
 EJECUTAR_JUEGO:
+    BSR COWBOY_DRAW
     BSR ACTUALIAR_CONTADOR
     BSR CONSUMIR_STAMINA
     BSR DIBUJAR_STAMINA
@@ -104,25 +104,13 @@ ESTADO_JUEGO:    DS.B    1
     
     INCLUDE "COWBOY.X68"
     
+    INCLUDE "FUENTES.X68"
+    
     SIMHALT             ; halt simulator
 
 
 
     END    START        ; last line of source
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

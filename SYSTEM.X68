@@ -540,6 +540,25 @@ GUARDAR_TIEMPO_SISTEMA:
     MOVE.L (A7)+, D0
     RTS
 *-----------------------------------------------------------
+
+*-----------------------------------------------------------
+ESPERAR_1S:
+*Descripción: Espera un segundo
+
+*ENTRADA: nada
+*SALIDA: nada
+*REGISTROS MODIFICADOS:  nada
+*-----------------------------------------------------------
+
+    MOVEM.L D0-D1, -(A7)
+    
+    MOVE.B #T_ESPERAR, D0
+    MOVE.B #100, D1
+    TRAP #15
+    
+    MOVEM.L (A7)+, D0-D1
+    RTS
+    
 *VARIABLES
 FLAG_FRAMES: DS.B    1
 TECLA_ASCII: DS.B    1
@@ -550,6 +569,8 @@ MOUSE_Y:     DS.W    1
 SEED_ALEATORIA: DS.W 1
 MOUSE_CLICK: DS.B    1
              DS.W    0
+
+
 
 
 

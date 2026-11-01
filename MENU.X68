@@ -194,16 +194,61 @@ TST_CLICK_LEADERBOARD:
     
 
 PEDIR_NOMBRE:
-*Ha de mostrar un menu en el que pide un nombre, se
-*ha de introducir y luego ha de cambiar el estado
-*del juego al de jugar
-
+    MOVEM.L D0-D2/A0, -(A7)
+    
+    LEA MENSAJE_INTRO, A0
+    MOVE.W #180, D0 ;Ponemos la coord y como 180
+    BSR MOSTRAR_TEXTO_CENTRADO
+    
+    MOVE.W #300, TEXTO_CURSOR_X
+    MOVE.W #240, TEXTO_CURSOR_Y
+    
+    MOVE.W #0, LETRA_CONT
+.ESPERAR_TECLA:
+    ;Leemos la tecla
+    BSR LEER_TECLADO_MENU
+    ;Metemos el valor ascii en la memoria
+    MOVE.B TECLA_ASCII, D0
+    ;Si es 0 volvemos al bucle hasta que se introduzca
+    CMP.B #0, D0
+    BEQ .ESPERAR_TECLA
+    
+    ;La guardamos en la posición del array de 4 letras
+    MOVE.W LETRA_CONT, D1
+    LEA JUGADOR_NOMBRE, A0
+    MOVE.B D0, 0(A0, D1.W) ;la posicion D1 de jugador_nombre será 
+                           ;el varor D1 ascii.
+                                 
+    BSR DIBUJAR_LETRA
+    
+    ADDQ.W #1, LETRA_CONT ; LETRA_CONT++
+    CMP.W #4, LETRA_CONT ;Si es el cuarto ya termina
+    BGE .FIN_PEDIR_NOMBRE 
+    
+.ESPERAR_LIBERACION:
+    ;Esperamos a que se suelte la tecla para que no ponga muchas veces
+    ;la misma tecla por pulsarla
+    BSR LEER_TECLADO_MENU
+    TST.B TECLA_ASCII
+    BNE .ESPERAR_LIBERACION
+    
+    BRA .ESPERAR_TECLA
+    
+.FIN_PEDIR_NOMBRE
+    BSR BORRAR_PANTALLA
+    MOVE.B #ESTADO_VAL_JUEGO, ESTADO_JUEGO
+    
+    MOVEM.L (A7)+, D0-D2/A0
     RTS
     
 
 *Ha de cambiar el estado del juego al de leaderboard
     
 *guarda la variable del nombre del jugador y su longitud
+
+*VARIABLES
+JUGADOR_NOMBRE: DS.B 4 ;4 LETRAS DE NOMBRE ASI RETRO
+LETRA_CONT:     DS.W 1 ;CONTADOR DE LETRAS INTRODUCIDAS
 
 
 

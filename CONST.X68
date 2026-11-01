@@ -5,7 +5,7 @@
 ;CONSTANTES DEL COWBOY
 COWBOY_INIT_X        EQU 384 ;Puse eso por poner
 COWBOY_INIT_Y        EQU 436 ;lo mismo
-COWBOY_VELOCIDAD     EQU 1
+COWBOY_VELOCIDAD     EQU 15
 COWBOY_RADIO      EQU 15 ;Por ahora es un circulo
 
 ;CONSTANTES DEL CACTUS
@@ -70,8 +70,11 @@ COWBOY_X_MAX    EQU 700
 COWBOY_Y_MIN    EQU 120
 COWBOY_Y_MAX    EQU 530
                          
-COWBOY_DELAY_MAX    EQU 7 ;El cooldown para que se mueva el cowboy, lo añadi porque se movia demasiado rapido
+COWBOY_DELAY_MAX    EQU 1 ;El cooldown para que se mueva el cowboy, lo añadi porque se movia demasiado rapido
 STAMINA_DELAY_MAX   EQU 33 ;LO MISMO PARA LA BARRA DE STAMINA
+
+
+
 
 
 
