@@ -15,8 +15,10 @@ COWBOY_INIT:
     MOVE.W   #COWBOY_INIT_X, COWBOY_POS_X
     MOVE.W   #COWBOY_INIT_Y, COWBOY_POS_Y
     
-    MOVE.W   #0, COWBOY_CONT_DELAY ;El contador es 0 inicialmente
     
+    MOVE.W  #COWBOY_INIT_X, COWBOY_PREV_X
+    MOVE.W  #COWBOY_INIT_Y, COWBOY_PREV_Y
+
     MOVE.L (A7)+, D0
     RTS
 *-----------------------------------------------------------
@@ -29,13 +31,13 @@ COWBOY_ERASE:
 *-----------------------------------------------------------
     MOVEM.L D1-D5, -(A7)
 
-    MOVE.W  COWBOY_POS_X, D1
+    MOVE.W  COWBOY_PREV_X, D1
     SUB.W   #COWBOY_RADIO, D1
-    MOVE.W  COWBOY_POS_Y, D2
+    MOVE.W  COWBOY_PREV_Y, D2
     SUB.W   #COWBOY_RADIO, D2
-    MOVE.W  COWBOY_POS_X, D3
+    MOVE.W  COWBOY_PREV_X, D3
     ADD.W   #COWBOY_RADIO, D3
-    MOVE.W  COWBOY_POS_Y, D4
+    MOVE.W  COWBOY_PREV_Y, D4
     ADD.W   #COWBOY_RADIO, D4
     MOVE.L  #$00000000, D5  
     BSR     DIBUJAR_ELIPSE
@@ -173,55 +175,16 @@ COWBOY_UPDATE:
 * En las nuevas teniendo en cuenta las colisiones con los bordes
 *-----------------------------------------------------------
 
-    MOVEM.L D0-D4, -(A7)
+    MOVEM.L D0-D3, -(A7)
     
+    ;Guardamos la opsicion anterior para borrarla
+    MOVE.W  COWBOY_POS_X, COWBOY_PREV_X
+    MOVE.W  COWBOY_POS_Y, COWBOY_PREV_Y
     
-    ;COOLDOWN (esto lo añadi porque iba demasiado rapido)
-    
-    MOVE.W COWBOY_CONT_DELAY, D4
-    ADDQ.W #1, D4
-    CMP.W #COWBOY_DELAY_MAX, D4
-    BLT .GUARDAR_DELAY
-    
-    MOVE.W #0, COWBOY_CONT_DELAY
-    
-    
-    
-    MOVE.W COWBOY_POS_X, D2
-    MOVE.W COWBOY_POS_Y, D3
     
     BSR COWBOY_DET_MOV
     BSR COWBOY_UPDATE_COORDS
-    
-    CMP.W D2, D0
-    BNE .HAY_CAMBIO
-    
-    CMP.W D3, D1
-    BEQ .FIN
-
-.HAY_CAMBIO:
-    ;Se ha movido, aqui si que hay que borrar y redibujar
-    ;No lo hace siempre ya que sino daría epilepsia
-    
-    MOVE.W D0, -(A7) ;Guardamos la X nueva
-    MOVE.W D1, -(A7) ;La y tambien
-     
-    MOVE.W D2, COWBOY_POS_X
-    MOVE.W D3, COWBOY_POS_Y
-    BSR COWBOY_ERASE
-    
-    MOVE.W (A7)+, COWBOY_POS_Y
-    MOVE.W (A7)+, COWBOY_POS_X
-    
-    BSR COWBOY_DRAW
-    BRA .FIN
-    
-.GUARDAR_DELAY:
-    MOVE.W D4, COWBOY_CONT_DELAY
-    
-
-.FIN:
-    MOVEM.L (A7)+, D0-D4
+    MOVEM.L (A7)+, D0-D3
     RTS
 *-----------------------------------------------------------
 BULLET_INIT
@@ -249,8 +212,14 @@ BULLET_UPDATE
 COWBOY_POS_X: DS.W 1
 COWBOY_POS_Y: DS.W 1
 
-COWBOY_CONT_DELAY:  DS.W 1 ;contador del delay del movimiento
+COWBOY_PREV_X: DS.W 1
+COWBOY_PREV_Y: DS.W 1
 *coord de las balas
+
+
+
+
+
 
 
 

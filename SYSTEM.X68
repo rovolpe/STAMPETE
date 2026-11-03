@@ -8,7 +8,7 @@
 *Lista de subrutinas:
 
 *INIT_SYSTEM
-*REGULAR_FPS
+*ESPERAR_FPS
 *ISR_TIMER
 *LEER_TECLADO_JUEGO
 *LEER_TECLADO_MENU
@@ -53,6 +53,11 @@ INIT_SYSTEM:
     MOVE.L  #ISR_TIMER, $78 ;Metemos el vector de interrupción
     CLR.B   FLAG_FRAMES ;limpiamos el flag de sincronizar
     
+    MOVE.L #32, D0
+    MOVE.B  #6, D1              
+    MOVE.B  #$86, D2            
+    MOVE.L  #30, D3             
+    TRAP    #15
     ;Inicializar ventana gráfica
     MOVE.L  #PANTALLA_ANCHO<<16|PANTALLA_ALTO,D1
     MOVE.B  #T_GRAF_INIT, D0
@@ -70,35 +75,28 @@ INIT_SYSTEM:
     CLR.W   MOUSE_Y
     CLR.B   MOUSE_CLICK
     
-    ANDI.W #$F8FF, SR
+    ANDI.W #$F8FF, SR ;reactivamos interrupciones
     MOVEM.L (A7)+, D0-D2
     RTS
-    
+
+*-----------------------------------------------------------     
 ESPERAR_FPS:
-        MOVEM.L D0-D1, -(A7)
-        MOVE.L #3, D1
-        MOVE.B #T_ESPERAR, D0
-        TRAP #15
-        MOVEM.L (A7)+, D0-D1
-        RTS
-*-----------------------------------------------------------
-REGULAR_FPS:
-*Activa el flag cada x tiempo para los fps
+
+*Descripción: espera hasta que no se active la interrrupcion
+
 *ENTRADA: Nada
 *SALIDA: nada
 *REGISTROS MODIFICADOS: Nada
-*-----------------------------------------------------------  
-    MOVEM.L D0-D1, -(A7)
-    MOVE.L #3, D1 *Este 3 son las centesimas de segundo de pausa, hay que 
-                  *crear una constante que lo calcule en base de los fps
-                  *que quiera el usuario, pero por ahora lo dejo en 3 que iria
-                  *a 33fps aprox
-    MOVE.B #T_ESPERAR, D0
-    TRAP #15
-    MOVEM.L (A7)+, D0-D1
+*----------------------------------------------------------- 
+    MOVEM.L D0, -(A7)
+.ESPERAR:
+    TST.B   FLAG_FRAMES     
+    BEQ     .ESPERAR              
+    CLR.B   FLAG_FRAMES         
+
+    MOVEM.L (A7)+, D0
     RTS
- 
-   
+
 *-----------------------------------------------------------  
 ISR_TIMER:
 *Mete en el flag que creamos un 1 si se activa
@@ -109,10 +107,6 @@ ISR_TIMER:
 *-----------------------------------------------------------  
     MOVE.B #1, FLAG_FRAMES
     RTE
-* LIMPIA LA PANTALLA
-* DIBUJA EL FONDO
-
-* LEER EL TECLADO (PARA EL JUEGO WASD)
 
 *-----------------------------------------------------------
 LEER_TECLADO_JUEGO:
@@ -569,6 +563,7 @@ MOUSE_Y:     DS.W    1
 SEED_ALEATORIA: DS.W 1
 MOUSE_CLICK: DS.B    1
              DS.W    0
+
 
 
 

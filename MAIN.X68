@@ -22,58 +22,106 @@
 
     INCLUDE "CONST.X68"
     INCLUDE "SYSCONST.X68"
-    
-*-----------------------------------------------------------
-* 2. INCLUIR LOS MÓDULOS DE DATOS
-*-----------------------------------------------------------
-* Si metemos alguno más en el futuro
 
 *-----------------------------------------------------------
-* 1. INICIALIZAR
+* 2. INICIALIZAR
 *-----------------------------------------------------------
 START: 
         BSR INIT_SYSTEM ;Vamos a la subrutina de inicializar
         BSR COWBOY_INIT
+        BSR INIT_CONTADOR
+        BSR INIT_STAMINA
         MOVE.B #ESTADO_VAL_MENU, ESTADO_JUEGO
-        BSR     MOSTRAR_MENU
-*-----------------------------------------------------------
-* 4. ACTUALIZAR
 *-----------------------------------------------------------
 *Bucle principal que según el estado ejecuta cada parte del
 *juego
 
 MAIN_LOOP:
+* LEER ENTRADAS
+
+    BSR     LEER_RATON
+    BSR     LEER_TECLADO_JUEGO
+    
+    
+* ACTUALIZAR LA LÓGICA
+
     MOVE.B ESTADO_JUEGO, D0 ;Metemos el estado en D0 para
                             ;comparar
     CMP.B #ESTADO_VAL_MENU, D0 ;Si es el del menu lo ejecuta
-    BEQ EJECUTAR_MENU ; POR HACER
+    BEQ LOGICA_MENU 
     
     CMP.B #ESTADO_VAL_JUEGO, D0 ;Si es el juego lo ejecuta
-    BEQ EJECUTAR_JUEGO ;POR HACER
+    BEQ LOGICA_JUEGO 
     
     CMP.B #ESTADO_VAL_LEADERBOARD, D0 ;Si es leaderboard lo mismo
-    BEQ EJECUTAR_LEADERBOARD ; POR HACER
-    
-    BRA APLICAR_FPS ;APLICAMOS LOS FPS QUE TOCAN POR HACER
-    
+    BEQ LOGICA_LEADERBOARD ; 
+        
     ;MENU
-EJECUTAR_MENU:
+LOGICA_MENU:
     BSR PROCESAR_MENU
-    BRA APLICAR_FPS
+    BRA FASE_DIBUJO
 
     ;JUEGO
-EJECUTAR_JUEGO:
-    BSR COWBOY_DRAW
+LOGICA_JUEGO:
     BSR ACTUALIAR_CONTADOR
     BSR CONSUMIR_STAMINA
     BSR DIBUJAR_STAMINA
     BSR COWBOY_UPDATE
-    BRA APLICAR_FPS
-EJECUTAR_LEADERBOARD:
+    BRA FASE_DIBUJO
+LOGICA_LEADERBOARD:
+    ;...
+    BRA FASE_DIBUJO
+    
+    
+;DIBUJAR EL JUEGO
+FASE_DIBUJO:
+    ;MIRAS QEUE DIBUJAR
+    MOVE.B  ESTADO_JUEGO, D0
+    CMP.B   #ESTADO_VAL_MENU, D0
+    BEQ     DIBUJAR_MENU
+    CMP.B   #ESTADO_VAL_JUEGO, D0
+    BEQ     DIBUJAR_JUEGO
+    CMP.B   #ESTADO_VAL_LEADERBOARD, D0
+    BEQ     DIBUJAR_LEADERBOARD
+    BRA     FASE_SYNC
+
+DIBUJAR_MENU:
+    BSR     MOSTRAR_MENU        
+    BRA     FASE_SYNC
+
+DIBUJAR_JUEGO:
+
+    BSR     DIBUJAR_STAMINA
+    BSR     DIBUJAR_CONTADOR
+    
+    ;Dibuja el cowboy solo si se ha movido
+    MOVE.W  COWBOY_POS_X, D0
+    CMP.W   COWBOY_PREV_X, D0
+    BNE     .HACER_CAMBIO
+    
+    MOVE.W  COWBOY_POS_Y, D0
+    CMP.W   COWBOY_PREV_Y, D0
+    
+    BEQ     .FIN_DIBUJO_CWB ;NO LO DIBUJA SY X e Y son iguales
+    
+.HACER_CAMBIO:
+    BSR COWBOY_ERASE
+    BSR COWBOY_DRAW
+    
+    MOVE.W  COWBOY_POS_X, COWBOY_PREV_X
+    MOVE.W  COWBOY_POS_Y, COWBOY_PREV_Y
+    
+.FIN_DIBUJO_CWB
+
+    BRA     FASE_SYNC
+
+DIBUJAR_LEADERBOARD:
+    ; (Futuro dibujado del leaderboard)
+    BRA     FASE_SYNC
 *-----------------------------------------------------------
 * 5. ESPERAR A SINCRONIZACIÓN
 *-----------------------------------------------------------
-APLICAR_FPS:
+FASE_SYNC:
         BSR     ESPERAR_FPS   
         BRA     MAIN_LOOP 
 *-----------------------------------------------------------    
@@ -111,6 +159,9 @@ ESTADO_JUEGO:    DS.B    1
 
 
     END    START        ; last line of source
+
+
+
 
 
 

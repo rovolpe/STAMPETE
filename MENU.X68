@@ -91,7 +91,7 @@ TST_CLICK_JUGAR:
 *Registros modificados: D0
 *-----------------------------------------------------------
     MOVEM.L D1-D2, -(A7) ;Guardamos los registros
-    BSR LEER_RATON ;Actualiza (MOUSE_X)
+
     ;(MOUSE_Y) Y (MOUSE_CLICK)
     
     ;Primero miramos si se ha clickado
@@ -140,8 +140,6 @@ TST_CLICK_LEADERBOARD:
 *Registros modificados: D0
 *-----------------------------------------------------------
     MOVEM.L D1-D2, -(A7) ;Guardamos los registros
-    BSR LEER_RATON ;Actualiza (MOUSE_X)
-    ;(MOUSE_Y) Y (MOUSE_CLICK)
     
     ;Primero miramos si se ha clickado
     MOVE.B MOUSE_CLICK, D0
@@ -169,18 +167,6 @@ TST_CLICK_LEADERBOARD:
     
     MOVE.B #1, D0
     
-    
-    *Quitar luego, si se ha pulsado lo pinta de verde 
-        *para testing
-    MOVEM.L D0-D5, -(A7)
-    MOVE.W #BTN_LEADERBOARD_X1, D1
-    MOVE.W #BTN_LEADERBOARD_Y1, D2
-    MOVE.W #BTN_LEADERBOARD_X2, D3
-    MOVE.W #BTN_LEADERBOARD_Y2, D4
-    MOVE.L #$0000FF00, D5
-    
-    BSR DIBUJAR_RECTANGULO_RELLENO
-    MOVEM.L (A7)+, D0-D5
     BRA     .FIN        
     *COMPRUEBAS SI (MOUSE_CLICK) SE HA PRODUCIDO
     *SINO SALTAS
@@ -213,6 +199,21 @@ PEDIR_NOMBRE:
     CMP.B #0, D0
     BEQ .ESPERAR_TECLA
     
+    AND.W #$00FF, D0
+    
+    ;Si es minusculas lo ponemos en mayusculas
+    CMP.W   #97, D0             
+    BLT     .FILTRO_MAYUSCULAS  
+    CMP.W   #122, D0            
+    BGT     .FILTRO_MAYUSCULAS
+    SUB.W   #32, D0
+    
+.FILTRO_MAYUSCULAS:
+    CMP.W   #65, D0             
+    BLT     .ESPERAR_LIBERACION 
+    CMP.W   #90, D0             
+    BGT     .ESPERAR_LIBERACION
+    
     ;La guardamos en la posición del array de 4 letras
     MOVE.W LETRA_CONT, D1
     LEA JUGADOR_NOMBRE, A0
@@ -235,6 +236,11 @@ PEDIR_NOMBRE:
     BRA .ESPERAR_TECLA
     
 .FIN_PEDIR_NOMBRE
+.ESP_LIB_FIN:
+    BSR     LEER_TECLADO_MENU
+    TST.B   TECLA_ASCII
+    BNE     .ESP_LIB_FIN
+    BSR     ESPERAR_1S
     BSR BORRAR_PANTALLA
     MOVE.B #ESTADO_VAL_JUEGO, ESTADO_JUEGO
     
@@ -249,6 +255,8 @@ PEDIR_NOMBRE:
 *VARIABLES
 JUGADOR_NOMBRE: DS.B 4 ;4 LETRAS DE NOMBRE ASI RETRO
 LETRA_CONT:     DS.W 1 ;CONTADOR DE LETRAS INTRODUCIDAS
+
+
 
 
 

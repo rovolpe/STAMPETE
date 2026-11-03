@@ -23,7 +23,8 @@ INIT_CONTADOR:
     BSR GUARDAR_TIEMPO_SISTEMA
     MOVE.L D1, ULTIMO_TIEMPO
     
-    BSR DIBUJAR_CONTADOR
+    
+    MOVE.B  #1, CONTADOR_CAMBIO
     MOVEM.L (A7)+, D0-D1
     
     RTS
@@ -64,7 +65,10 @@ DIBUJAR_CONTADOR:
 *-----------------------------------------------------------
     MOVEM.L D0-D5, -(A7)
     
+    TST.B CONTADOR_CAMBIO
+    BEQ .FIN_DIBUJO
     
+    CLR.B CONTADOR_CAMBIO
     
     ;dibujamos rectangulo negro para el fondo para que no
     ;se superpongan al redibujar
@@ -125,7 +129,8 @@ DIBUJAR_CONTADOR:
     MOVE.W (A7)+, D0
     SWAP D0
     BSR DIBUJAR_DIGITO_PIXEL
-    
+
+.FIN_DIBUJO:    
     MOVEM.L (A7)+, D0-D5
     RTS
     
@@ -150,13 +155,13 @@ ACTUALIAR_CONTADOR:
     ADD.L #100, ULTIMO_TIEMPO
     
     CMP.W #60, CONTADOR_SEGUNDOS ;pasaron 60s?
-    BLT .DIBUJAR ; si no va a dibujar
+    BLT .MARCAR_CAMBIO ; si no va a dibujar
     CLR.W CONTADOR_SEGUNDOS ; si si sec = 0
     ADD.W  #1, CONTADOR_MINUTOS ; min++
 
 
-.DIBUJAR:
-    BSR DIBUJAR_CONTADOR    
+.MARCAR_CAMBIO
+    MOVE.B #1, CONTADOR_CAMBIO   
 .FIN:
     MOVEM.L (A7)+, D0-D2
     RTS
@@ -257,6 +262,9 @@ DIBUJAR_DIGITO_PIXEL:
 CONTADOR_SEGUNDOS: DS.W 1
 CONTADOR_MINUTOS:  DS.W 1
 ULTIMO_TIEMPO: DS.L 1
+CONTADOR_CAMBIO: DS.B 1
+    DS.W 0
+
 
 
 
