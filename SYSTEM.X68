@@ -430,6 +430,7 @@ ESCRIBIR_ARCHIVO:
 
 *ENTRADA: D1.L = ID
 *         A0.L = Puntero al buffer
+*         D2.L = Numero de bytes a leer
 *SALIDA: D0.W = Código de estado, éxito si es un 0
 *REGISTROS MODIFICADOS: D0
 *-----------------------------------------------------------
@@ -563,6 +564,7 @@ MOUSE_Y:     DS.W    1
 SEED_ALEATORIA: DS.W 1
 MOUSE_CLICK: DS.B    1
              DS.W    0
+
 
 
 

@@ -13,11 +13,60 @@
 
 *-----------------------------------------------------------
 
+
+* 1. Abrir fichero en el que escribir
+
+
+ *Descripción: abre un archivo del disco o crea uno
+
+*ENTRADA: A0.L = Puntero del nombre del archivo
+*         D1.B = Como se abre, 0 si existe 1 si lo ha de
+*         crear o sobrescribir 
+*SALIDA:  D1.L = ID archivo
+*         D0.W = Estado de lo que se hizo (BIEN = 0, MAL OTRA COSA)
+*REGISTROS MODIFICADOS: D0 y D1
+*
+
+*ABRIR_LEADERBOARD:
+
+ *  MOVEM.L D0-D1/A0 , -(A7)
+    
+  * MOVE.B #0, D1
+   *LEA NOMBRE_FICHERO, A0
+  * BSR ABRIR_ARCHIVO
+   
+   *MOVE.L D1, ID_FICHEROS
+   *MOVEM (A7)+, D0-D1/A0
+   
+   *RTS
+   
+   
 * ESCRIBIR EL LEADERBOARD
+*Descripción: Escribe un bloque de bytes desde un archivo
+*abierto
+
+*ENTRADA: D1.L = ID
+*         A0.L = Puntero al buffer
+*SALIDA: D0.W = Código de estado, éxito si es un 0
+*REGISTROS MODIFICADOS: D0
+
+
+ESCRIBIR_LEADERBOARD:
+
+
 * ORDENAR LA LISTA
 * LEER LA LISTA
 * DIBUJAR LA LISTA
 * SALIR DEL LEADERBOARD
+
+
+
+*NOMBRE_FICHERO:  DC.B 'leaderboard.txt',0
+  * DS.W 0 
+ *  DC.L ID_FICHEROS
+
+
+
 
 
 

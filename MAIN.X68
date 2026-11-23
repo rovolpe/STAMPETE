@@ -17,7 +17,7 @@
     ORG    $1000
 
 *-----------------------------------------------------------
-* 1. INCLUIR LAOS OTROS MÓDULOS DE CONSTANTES
+* 1. INCLUIR LOS MÓDULOS DE CONSTANTES
 *-----------------------------------------------------------
 
     INCLUDE "CONST.X68"
@@ -159,6 +159,7 @@ ESTADO_JUEGO:    DS.B    1
 
 
     END    START        ; last line of source
+
 
 
 
