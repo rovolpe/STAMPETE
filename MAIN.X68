@@ -28,6 +28,7 @@
 *-----------------------------------------------------------
 START: 
         BSR INIT_SYSTEM ;Vamos a la subrutina de inicializar
+        BSR INIT_LEADERBOARD
         BSR COWBOY_INIT
         BSR INIT_CONTADOR
         BSR INIT_STAMINA
@@ -55,6 +56,8 @@ MAIN_LOOP:
     
     CMP.B #ESTADO_VAL_LEADERBOARD, D0 ;Si es leaderboard lo mismo
     BEQ LOGICA_LEADERBOARD ; 
+    
+    BRA     FASE_DIBUJO
         
     ;MENU
 LOGICA_MENU:
@@ -69,7 +72,7 @@ LOGICA_JUEGO:
     BSR COWBOY_UPDATE
     BRA FASE_DIBUJO
 LOGICA_LEADERBOARD:
-    ;...
+    BSR     TST_CLICK_SALIR
     BRA FASE_DIBUJO
     
     
@@ -82,7 +85,7 @@ FASE_DIBUJO:
     CMP.B   #ESTADO_VAL_JUEGO, D0
     BEQ     DIBUJAR_JUEGO
     CMP.B   #ESTADO_VAL_LEADERBOARD, D0
-    BEQ     DIBUJAR_LEADERBOARD
+    BEQ     DIBUJAR_LB
     BRA     FASE_SYNC
 
 DIBUJAR_MENU:
@@ -115,8 +118,8 @@ DIBUJAR_JUEGO:
 
     BRA     FASE_SYNC
 
-DIBUJAR_LEADERBOARD:
-    ; (Futuro dibujado del leaderboard)
+DIBUJAR_LB:
+    BSR     DIBUJAR_LEADERBOARD
     BRA     FASE_SYNC
 *-----------------------------------------------------------
 * 5. ESPERAR A SINCRONIZACIÓN
@@ -159,6 +162,9 @@ ESTADO_JUEGO:    DS.B    1
 
 
     END    START        ; last line of source
+
+
+
 
 
 

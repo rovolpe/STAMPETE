@@ -67,6 +67,12 @@ INIT_SYSTEM:
     MOVE.B #T_GRAF_LIMPIAR, D0
     MOVE.W #$0000, D1
     TRAP #15
+    
+    ;Esto para desactivar el eco del teclado
+    MOVE.B #12, D0
+    MOVE.B #0, D1
+    
+    TRAP #15
     ;reiniciamos variables
     CLR.B   TECLA_ASCII
     CLR.B   ESTADO_WASD ;estado es pulsado/no pulsado
@@ -564,6 +570,7 @@ MOUSE_Y:     DS.W    1
 SEED_ALEATORIA: DS.W 1
 MOUSE_CLICK: DS.B    1
              DS.W    0
+
 
 
 
