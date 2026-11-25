@@ -3,8 +3,7 @@
 *Es el jugador.
 *Se puede mover hacia las cuatro direcciones utilizando WASD
 *Puede disparar en la dirección de donde se hace click con el ratón
-*?? Dirección o al punto exacto ?? Lo haria sobre el punto exacto 
-*que creo que seria mas facil
+
 
 *-----------------------------------------------------------
 COWBOY_INIT:
@@ -215,6 +214,7 @@ COWBOY_POS_Y: DS.W 1
 COWBOY_PREV_X: DS.W 1
 COWBOY_PREV_Y: DS.W 1
 *coord de las balas
+
 
 
 

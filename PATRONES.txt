@@ -1,0 +1,31 @@
+Patrones de cactus. Cada fila mide 16 caracteres.
+. vacio   N cactus normal   D cactus disparable
+
+Hay algunos ejemplos, aun no están todos
+
+NNNN....NNNN....
+.....NN......NN.
+
+.N.N.N.N.N.N.N.N
+
+NNN...B...NNN...
+
+
+.N.N.N.N.BBNN...
+
+.N.B...N.BB..N.N
+N.B.N.B.N.BN.B.N
+N.BN.BN.BN.BN.BN
+
+
+NB.NB.N.BNN.B.NB
+
+.N.N.N.N.N.N.N.N
+N.N.N.N.N.N.N.N.
+................
+.N.N.N.N.N.N.N.N
+N.N.N.N.N.N.N.N.
+
+
+
+

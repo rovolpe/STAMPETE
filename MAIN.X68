@@ -1,4 +1,4 @@
-    *-----------------------------------------------------------
+w    *-----------------------------------------------------------
 *MAIN
 *Aquí se verificarán os estados de todo el juego y decidirá
 *a que subrutinas llamar.
@@ -11,8 +11,6 @@
 *lo que yo crearía una variable de FPS y luego una subrutina que calcule
 *las centesimas de segundo que meter en D1 para el trap #15 tarea 33 para
 *que equivalga a estos FPS.
-
-*Esto se guardaría en SYSCONST ya que es uan constante del sistema entero.
 *-----------------------------------------------------------
     ORG    $1000
 
@@ -25,10 +23,15 @@
 
 *-----------------------------------------------------------
 * 2. INICIALIZAR
+*Inicializamos todo, y una vez inicializado ponemos el estado
+*Del juego como el estado del menú, ya que empieza en el menú
 *-----------------------------------------------------------
 START: 
-        BSR INIT_SYSTEM ;Vamos a la subrutina de inicializar
+        BSR INIT_SYSTEM 
+        BSR INIT_SONIDOS
         BSR INIT_LEADERBOARD
+        BSR CACTUS_CARGAR_PATRONES
+        BSR CACTUS_INIT
         BSR COWBOY_INIT
         BSR INIT_CONTADOR
         BSR INIT_STAMINA
@@ -38,7 +41,7 @@ START:
 *juego
 
 MAIN_LOOP:
-* LEER ENTRADAS
+* Lee el teclado  el ratón
 
     BSR     LEER_RATON
     BSR     LEER_TECLADO_JUEGO
@@ -57,20 +60,43 @@ MAIN_LOOP:
     CMP.B #ESTADO_VAL_LEADERBOARD, D0 ;Si es leaderboard lo mismo
     BEQ LOGICA_LEADERBOARD ; 
     
+    ;Que vaya a la fase de dibujo sí o sçi
     BRA     FASE_DIBUJO
         
-    ;MENU
+
+
+    ;Lógica del menú
 LOGICA_MENU:
+    ;PROCESAR_MENU hace toda la lógica de este
     BSR PROCESAR_MENU
+    ;Va a la fase de dibujo
     BRA FASE_DIBUJO
 
-    ;JUEGO
+
+
+
+    ;Lógica del juego
 LOGICA_JUEGO:
+    ;Reproducimos el sonido
+    MOVE.B  #SND_PRUEBA, D1
+    BSR REPRODUCIR_SONIDO
+    
+    ;Actualizamos el contador
     BSR ACTUALIAR_CONTADOR
+    
+    ;Consumimos y redibujamos la stamina
     BSR CONSUMIR_STAMINA
     BSR DIBUJAR_STAMINA
+    
+    ;Actualizamos las coordenadas del jugador y los cactus
     BSR COWBOY_UPDATE
+    BSR CACTUS_UPDATE
+    
+    ;Vamos a la fase de dibujo
     BRA FASE_DIBUJO
+    
+    
+    ;Lógica del laderboard
 LOGICA_LEADERBOARD:
     BSR     TST_CLICK_SALIR
     BRA FASE_DIBUJO
@@ -96,6 +122,8 @@ DIBUJAR_JUEGO:
 
     BSR     DIBUJAR_STAMINA
     BSR     DIBUJAR_CONTADOR
+    BSR     DIBUJAR_MARCO
+    BSR     DIBUJAR_CACTUS
     
     ;Dibuja el cowboy solo si se ha movido
     MOVE.W  COWBOY_POS_X, D0
@@ -144,6 +172,8 @@ ESTADO_JUEGO:    DS.B    1
     INCLUDE "MENU.X68"
 
     INCLUDE "CACTUS.X68"
+    
+    INCLUDE "MARCO.X68"
 
     INCLUDE "LEADERBOARD.X68"
 
@@ -162,6 +192,16 @@ ESTADO_JUEGO:    DS.B    1
 
 
     END    START        ; last line of source
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -23,8 +23,8 @@ STAMINA_MAX          EQU 1000
 STAMINA_RITMO        EQU 3
 STAMINA_RESTA_CACTUS EQU 20
 STAMINA_SUMA_FLOR    EQU 25
-STAMINA_X1           EQU 760
-STAMINA_Y1           EQU 50
+STAMINA_X1           EQU 740
+STAMINA_Y1           EQU 100
 STAMINA_X2           EQU 780
 STAMINA_Y2           EQU 550
 STAMINA_ALTO_MAX     EQU (STAMINA_Y2-STAMINA_Y1)
@@ -59,19 +59,20 @@ COLOR_GRIS_MARCO        EQU $00808080
 ;Me he inventado algunos pero habría que poner  
 ;uno por audio
 *EFECTOS DE SONIDO: IDS
-ID_SND_DISPARO  EQU 0
-ID_SND_FLOR     EQU 1
-ID_SND_HERIDO   EQU 2
-ID_SND_COMER    EQU 3
+SND_PRUEBA      EQU 0 
      
                          
-COWBOY_X_MIN    EQU 40
-COWBOY_X_MAX    EQU 700
+COWBOY_X_MIN    EQU 95
+COWBOY_X_MAX    EQU 705
 COWBOY_Y_MIN    EQU 120
 COWBOY_Y_MAX    EQU 530
                          
 COWBOY_DELAY_MAX    EQU 1 ;El cooldown para que se mueva el cowboy, lo añadi porque se movia demasiado rapido
 STAMINA_DELAY_MAX   EQU 2 ;LO MISMO PARA LA BARRA DE STAMINA
+
+
+
+
 
 
 
